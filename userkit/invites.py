@@ -17,7 +17,7 @@ class InviteManager(object):
 
         post_data = {}
         for field in Invite.mutable_fields:
-            if (kwargs.has_key(field) and (kwargs.get(field) is not None)):
+            if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
         uri = '/v1/invites'
@@ -31,7 +31,7 @@ class InviteManager(object):
 
         post_data = {}
         for field in Invite.mutable_fields:
-            if (kwargs.has_key(field) and (kwargs.get(field) is not None)):
+            if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
         uri = '/v1/invites/send'
@@ -70,6 +70,7 @@ class InviteManager(object):
             return None
 
         uri = '/v1/invites/accept'
-        result_dict = self._NQ.request('post', uri, post_data={'user_id' : user_id, 'token' : token})
+        result_dict = self._NQ.request(
+            'post', uri, post_data={'user_id': user_id, 'token': token})
         iv = Invite(self._NQ, **result_dict)
         return iv

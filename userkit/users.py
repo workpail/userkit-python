@@ -35,7 +35,7 @@ class UserManager(object):
 
         post_data = {}
         for field in User.mutable_fields:
-            if (kwargs.has_key(field) and (kwargs.get(field) is not None)):
+            if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
         uri = '/v1/users'
@@ -151,7 +151,8 @@ class UserManager(object):
 
         try:
             uri = '/v1/users/request_phone_verification_code'
-            result_dict = self._NQ.request('post', uri, post_data={'phone' : phone_number, 'send_method' : send_method})
+            result_dict = self._NQ.request('post', uri,
+                post_data={'phone': phone_number, 'send_method': send_method})
             return result_dict.get('success', False) is True
         except error.ParseError:
             pass
@@ -163,7 +164,8 @@ class UserManager(object):
 
         try:
             uri = '/v1/users/verify_phone'
-            result_dict = self._NQ.request('post', uri, post_data={'phone' : phone_number, 'code' : verification_code})
+            result_dict = self._NQ.request('post', uri,
+                post_data={'phone': phone_number, 'code': verification_code})
             if result_dict.get('verified', False) is True:
                 return result_dict.get('verified_phone_token')
             return None
@@ -177,7 +179,8 @@ class UserManager(object):
 
         try:
             uri = '/v1/users/%s/verify_phone_for_user' % user_id
-            result_dict = self._NQ.request('post', uri, post_data={'phone' : phone_number, 'code' : verification_code})
+            result_dict = self._NQ.request('post', uri,
+                post_data={'phone': phone_number, 'code': verification_code})
             return result_dict.get('verified', False) is True
         except error.ParseError:
             pass

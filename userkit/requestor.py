@@ -5,6 +5,7 @@ import error
 
 from http_client import new_default_http_client
 
+
 class Requestor(object):
     def __init__(self, api_key=None, api_base_url=None):
         self.app_id = None
@@ -52,11 +53,8 @@ class Requestor(object):
             headers.update({'Content-Type': 'application/json'})
             post_data = util.json.dumps(post_data)
 
-        # print '\n-->> *** request: method=%s, url=%s, headers=%s, post_data=%s' % (method, url, headers, post_data)
-
-        (content, status_code) = self.httpHandler.request(method, url, headers, post_data)
-
-        # print '\n-->> *** RESPONSE IS: content=%s, status_code=%d' % (content, status_code)
+        content, status_code = self.httpHandler.request(method, url, headers,
+                                                        post_data)
 
         return self.process_response(content, status_code)
 
@@ -65,21 +63,29 @@ class Requestor(object):
             try:
                 return util.json.loads(content)
             except Exception as e:
-                raise error.error_by_type('json_parse_error', message=repr(e), http_status=status_code, http_body=content)
+                raise error.error_by_type('json_parse_error', message=repr(e),
+                                    http_status=status_code, http_body=content)
 
         elif status_code == 404 or status_code == 500:
-            raise error.error_by_type('http_error', http_status=status_code, http_body=content)
+            raise error.error_by_type('http_error', http_status=status_code,
+                                      http_body=content)
 
         # otherwise we have an error condition
         try:
             jsonOb = util.json.loads(content)
         except Exception as e:
-            raise error.error_by_type('json_parse_error', message=repr(e), http_status=status_code, http_body=content)
+            raise error.error_by_type('json_parse_error', message=repr(e),
+                                      http_status=status_code, http_body=content)
 
         # otherwise, a non-200 code was returned along with a JSON error object
         if jsonOb.get('error'):
-            raise error.error_by_obj(jsonOb.get('error'), http_status=status_code, http_body=content)
+            raise error.error_by_obj(jsonOb.get('error'),
+                                http_status=status_code, http_body=content)
         elif jsonOb.get('errors'):
-            raise error.error_by_obj_list(jsonOb.get('errors'), http_status=status_code, http_body=content)
+            raise error.error_by_obj_list(jsonOb.get('errors'),
+                                http_status=status_code, http_body=content)
         else:
-            raise error.error_by_type('api_error', message='No Error Object Returned', http_status=status_code, http_body=content)
+            raise error.error_by_type('api_error',
+                                      message='No Error Object Returned',
+                                      http_status=status_code,
+                                      http_body=content)

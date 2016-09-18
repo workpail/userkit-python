@@ -1,6 +1,7 @@
 class Invite(object):
     # class vars
-    mutable_fields = ['accepted_date', 'accepted_user', 'accepted', 'app_id', 'expires_secs', 'extras', 'from_user', 'to_email']
+    mutable_fields = ['to_email', 'from_user', 'expires_secs', 'extras',
+                      'greeting', 'body', 'signature']
 
     # instance vars
     id = None
