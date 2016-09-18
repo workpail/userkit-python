@@ -12,7 +12,7 @@ class UserKit(object):
     users = None
     invites = None
 
-    def __init__(self, api_key, api_base_url=None):
+    def __init__(self, api_key, api_base_url=None, _requestor=None):
         if api_key is None:
             raise TypeError('api_key cannot be blank.')
 
@@ -23,7 +23,7 @@ class UserKit(object):
         self.api_base_url = api_base_url
 
         # make the encapsulated objects
-        self._NQ = Requestor(self.api_key, self.api_base_url)
+        self._NQ = _requestor or Requestor(self.api_key, self.api_base_url)
         self.users = UserManager(self._NQ)
         self.invites = InviteManager(self._NQ)
 
