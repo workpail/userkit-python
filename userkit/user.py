@@ -43,6 +43,6 @@ class User(object):
     def disable(self, disable_mode):
         uri = '/users/%s/disable' % self.id
 
-        result_dict = self._NQ.request('post', uri, post_data={'disabled' : disable_mode})
+        result_dict = self._NQ.request('post', uri, post_data={'disabled': disable_mode})
         self.__dict__.update(result_dict)
         return True
