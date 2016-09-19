@@ -1,8 +1,11 @@
 import util
 
 
-# The Session object containing the session token and some timestamps used internally
 class Session(object):
+    """Session holds a user's session info.
+
+    login_user() and refresh_token() return a Session object.
+    """
     refresh_after_secs = None
     expires_in_secs = None
     token = None
