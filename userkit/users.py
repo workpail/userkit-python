@@ -106,7 +106,7 @@ class UserManager(object):
             pass
         return False
 
-    def fetch_all(self, limit=25, next_page=None, search=None, show_disabled=None):
+    def fetch_users(self, limit=25, next_page=None, search=None, show_disabled=None):
         uri_params = {}
         if limit:
             uri_params['limit'] = limit

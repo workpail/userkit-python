@@ -48,7 +48,7 @@ class InviteManager(object):
         iv = Invite(self._NQ, **result_dict)
         return iv
 
-    def fetch_all_invites(self, limit=25, next_page=None):
+    def fetch_invites(self, limit=25, next_page=None):
         uri_params = {}
         if limit:
             uri_params['limit'] = limit

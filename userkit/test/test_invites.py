@@ -20,7 +20,7 @@ class TestInvites(BaseTestCase):
         self.assertEqual(invite.id, DUMMY_INVITE['id'])
 
     def test_list_invites(self):
-        invite_list = self.uk.invites.fetch_all_invites()
+        invite_list = self.uk.invites.fetch_invites()
         self.assertTrue(hasattr(invite_list, 'next_page'))
         self.assertTrue(hasattr(invite_list[0], 'to_email'))
 

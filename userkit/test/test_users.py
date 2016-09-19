@@ -10,7 +10,7 @@ class TestUsers(BaseTestCase):
         self.assertEqual(user.email, DUMMY_USER['email'])
 
     def test_list_users(self):
-        l = self.uk.users.fetch_all()
+        l = self.uk.users.fetch_users()
         self.assertIsInstance(l, list)
         self.assertTrue(hasattr(l, 'next_page'))
         self.assertTrue(hasattr(l[0], 'username'))
