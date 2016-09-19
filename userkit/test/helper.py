@@ -53,6 +53,8 @@ DUMMY_SESSION = json.loads("""{
     "refresh_after_secs": 77758.979659999997
 }""")
 
+DUMMY_SUCCESS = json.loads("""{"success": true}""")
+
 
 class MockRequestor(object):
     """MockRequestor pretends to be the requestor.Requestor class.
@@ -68,6 +70,9 @@ class MockRequestor(object):
             # List users
             if uri == '/v1/users':
                 return DUMMY_USER_LIST
+            # Refresh session token
+            elif uri == '/v1/users/auth_token':
+                return DUMMY_SESSION
             # Get a user
             elif uri.startswith('/v1/users/'):
                 return DUMMY_USER
@@ -77,6 +82,21 @@ class MockRequestor(object):
             # Login returns a session token
             if uri == '/v1/users/login':
                 return DUMMY_SESSION
+            # Logout returns a success flag
+            elif uri == '/v1/users/logout':
+                return DUMMY_SUCCESS
             # Create and update endpoints both return a user
             elif uri.startswith('/v1/users'):
+                if DUMMY_USER['id'] in uri:
+                    u = DUMMY_USER.copy()
+                    if uri.endswith('/disable'):
+                        # This is a set-disabled state request, returns user
+                        u['disabled'] = post_data['disabled']
+                    elif uri.endswith('/auth_type'):
+                        # This is a set-auth-type request, returns success flag
+                        return DUMMY_SUCCESS
+                    else:
+                        # This is an update
+                        u.update(post_data)
+                    return u
                 return DUMMY_USER

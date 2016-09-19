@@ -9,7 +9,7 @@ class UserList(list):
 
 class UserManager(object):
     _NQ = None
-    validAuthTypes = ['OTP', '2FA', 'password']
+    validAuthTypes = ['password', 'two_factor', 'otp']
     validSendTypes = ['sms', 'call']
 
     def __init__(self, nq):
