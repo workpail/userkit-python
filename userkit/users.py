@@ -106,17 +106,12 @@ class UserManager(object):
             pass
         return False
 
-    def fetch_users(self, limit=25, next_page=None, search=None, show_disabled=None):
+    def fetch_users(self, limit=25, next_page=None):
         uri_params = {}
         if limit:
             uri_params['limit'] = limit
         if next_page:
             uri_params['next_page'] = next_page
-        #js is this supported?
-        # if search:
-        #     uri_params["search"] = search
-        # if show_disabled:
-        #     uri_params["show_disabled"] = show_disabled
 
         uri = '/users'
         result_list = self._NQ.request('get', uri, uri_params=uri_params)
