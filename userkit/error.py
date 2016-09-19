@@ -104,7 +104,7 @@ class InvalidRequestError(RequestError):
     pass
 
 
-### User Errors ###
+# User Errors ---------------------------------------------------------
 
 class UserError(Error):
     def __new__(cls, error_obj, code=None, param=None, message=None, http_status=None, http_body=None):
@@ -117,8 +117,7 @@ class RequiresLoginError(UserError):
     pass
 
 
-
-### Helper functions to create the appropriate error exception ###
+# Helper functions to create the appropriate error exception ----------
 
 error_types = {
     'user_error': UserError,
