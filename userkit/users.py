@@ -144,7 +144,7 @@ class UserManager(object):
             pass
         return False
 
-    def request_phone_verification_code(self, phone_number, send_method):
+    def request_phone_verification_code(self, phone_number, send_method='sms'):
         if not phone_number or not self.is_valid_send_type(send_method):
             return False
 
