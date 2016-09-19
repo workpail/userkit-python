@@ -23,7 +23,14 @@ class Requestor(object):
 
     def create_headers(self, headers):
         if self.authorization is None:
-            self.authorization = 'Basic %s' % (base64.b64encode('%s' % self.api_key))
+            if ':' in self.api_key:
+                # Old style key
+                self.authorization = 'Basic %s' % \
+                                     base64.b64encode('%s' % self.api_key)
+            else:
+                # New style, username part is always "api"
+                self.authorization = 'Basic %s' % \
+                                     base64.b64encode('api:%s' % self.api_key)
 
         request_headers = {
             'Authorization': self.authorization
