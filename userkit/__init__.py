@@ -18,9 +18,11 @@ class UserKit(object):
 
         if api_base_url is None:
             api_base_url = 'https://api.userkit.io/v1'
+        else:
+            api_base_url += '/v1'
 
         self.api_key = api_key
-        self.api_base_url = api_base_url + '/v1'
+        self.api_base_url = api_base_url
 
         # make the encapsulated objects
         self._NQ = _requestor or Requestor(self.api_key, self.api_base_url)

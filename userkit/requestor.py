@@ -7,7 +7,7 @@ from http_client import new_default_http_client
 
 
 class Requestor(object):
-    
+
     def __init__(self, api_key=None, api_base_url=None):
         self.api_key = api_key
         self.api_base_url = api_base_url
