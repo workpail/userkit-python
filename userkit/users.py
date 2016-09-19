@@ -25,7 +25,7 @@ class UserManager(object):
         if not token:
             return None
         try:
-            return self.fetch_user_by_token(token)
+            return self.fetch_user_by_session(token)
         except error.RequiresLoginError:
             return None
 
@@ -65,7 +65,7 @@ class UserManager(object):
         self._NQ.request('post', uri, headers={'X-User-Token': token})
         return True
 
-    def fetch_user_by_token(self, token):
+    def fetch_user_by_session(self, token):
         if not token:
             return None
 
@@ -74,7 +74,7 @@ class UserManager(object):
         user = User(self._NQ, **result_dict)
         return user
 
-    def fetch_user_by_userid(self, user_id):
+    def fetch_user(self, user_id):
         if not user_id:
             return None
 
@@ -128,7 +128,7 @@ class UserManager(object):
         user_list.next_page = result_list.get('next_page')
         return user_list
 
-    def assign_user_auth_type(self, user_id, auth_type, phone_number=None, phone_token=None):
+    def set_user_auth_type(self, user_id, auth_type, phone_number=None, phone_token=None):
         if not user_id or not self.is_valid_auth_type(auth_type):
             return False
 

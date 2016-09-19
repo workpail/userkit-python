@@ -6,7 +6,7 @@ from helper import DUMMY_VERIFIED_EMAIL_SUCCESS
 class TestUsers(BaseTestCase):
 
     def test_get_user(self):
-        user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
+        user = self.uk.users.fetch_user(DUMMY_USER['id'])
         self.assertEqual(user.email, DUMMY_USER['email'])
 
     def test_list_users(self):
@@ -21,7 +21,7 @@ class TestUsers(BaseTestCase):
 
     def test_update_user(self):
         new_name = "The New Name"
-        user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
+        user = self.uk.users.fetch_user(DUMMY_USER['id'])
         user.name = new_name
         user.save()
         self.assertEqual(user.name, new_name)
@@ -48,20 +48,20 @@ class TestUsers(BaseTestCase):
         self.assertTrue(success)
 
     def test_disable_user(self):
-        user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
+        user = self.uk.users.fetch_user(DUMMY_USER['id'])
         success = user.disable(True)
         self.assertTrue(success)
         self.assertEqual(user.disabled, True)
 
     def test_set_user_auth_type(self):
-        success = self.uk.users.assign_user_auth_type(
+        success = self.uk.users.set_user_auth_type(
             DUMMY_USER['id'], 'two_factor')
         self.assertTrue(success)
 
     # Utility methods
 
     def test_user__str__method(self):
-        user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
+        user = self.uk.users.fetch_user(DUMMY_USER['id'])
         try:
             s = user.__str__()
         except Exception as e:
