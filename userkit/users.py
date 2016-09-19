@@ -34,7 +34,7 @@ class UserManager(object):
             return None
 
         post_data = {}
-        for field in User.mutable_fields:
+        for field in User._mutable_fields:
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 

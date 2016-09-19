@@ -16,7 +16,7 @@ class InviteManager(object):
             return None
 
         post_data = {}
-        for field in Invite.mutable_fields:
+        for field in Invite._create_fields:
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
@@ -30,7 +30,7 @@ class InviteManager(object):
             return None
 
         post_data = {}
-        for field in Invite.mutable_fields:
+        for field in Invite._create_fields:
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 

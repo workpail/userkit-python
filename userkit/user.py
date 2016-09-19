@@ -3,7 +3,7 @@ import util
 
 class User(object):
     # class field
-    mutable_fields = ['username', 'email', 'name', 'password', 'auth_type']
+    _mutable_fields = ['username', 'email', 'name', 'password', 'auth_type']
 
     # instance fields
     _NQ = None
@@ -31,7 +31,7 @@ class User(object):
     def save(self):
         uri = '/users/%s' % self.id
         post_data = {}
-        for field in self.mutable_fields:
+        for field in self._mutable_fields:
             val = self.__dict__.get(field)
             if val is not None:
                 post_data[field] = val

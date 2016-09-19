@@ -3,7 +3,7 @@ import util
 
 class Invite(object):
     # class vars
-    mutable_fields = ['to_email', 'from_user', 'expires_secs', 'extras',
+    _create_fields = ['to_email', 'from_user', 'expires_secs', 'extras',
                       'greeting', 'body', 'signature']
 
     # instance vars
