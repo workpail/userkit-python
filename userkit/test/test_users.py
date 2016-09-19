@@ -58,6 +58,15 @@ class TestUsers(BaseTestCase):
             DUMMY_USER['id'], 'two_factor')
         self.assertTrue(success)
 
+    # Utility methods
+
+    def test_user__str__method(self):
+        user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
+        try:
+            s = user.__str__()
+        except Exception as e:
+            self.fail('user.__str__() raises exception: %r' % e)
+
 
 class TestVerification(BaseTestCase):
 
@@ -91,3 +100,13 @@ class TestVerification(BaseTestCase):
         success = self.uk.users.verify_email_for_user(
             DUMMY_USER['id'], 'fake@example.com', 'fake-code')
         self.assertTrue(success)
+
+
+class TestSession(BaseTestCase):
+
+    def test_session__str__method(self):
+        session = self.uk.users.login_user('fake-uname', 'fake-pw')
+        try:
+            s = session.__str__()
+        except Exception as e:
+            self.fail('user.__str__() raises exception: %r' % e)

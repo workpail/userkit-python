@@ -27,3 +27,12 @@ class TestInvites(BaseTestCase):
     def test_accept_invite(self):
         invite = self.uk.invites.accept_invite('fake-user-id', 'fake-token')
         self.assertTrue(invite.accepted)
+
+    # Util methods
+
+    def test_invite__str__method(self):
+        invite = self.uk.invites.fetch_invite(DUMMY_INVITE['id'])
+        try:
+            s = invite.__str__()
+        except Exception as e:
+            self.fail('user.__str__() raises exception: %r' % e)

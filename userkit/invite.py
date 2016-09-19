@@ -1,3 +1,6 @@
+import util
+
+
 class Invite(object):
     # class vars
     mutable_fields = ['to_email', 'from_user', 'expires_secs', 'extras',
@@ -24,10 +27,8 @@ class Invite(object):
         self.__dict__.update(kwargs)
 
     def __str__(self):
-        rs = ''
-        klist = sorted(self.__dict__.keys())
-        for key in klist:
-            if rs is not '':
-                rs += ', '
-            rs += "'%s': '%s'" % (key, self.__dict__[key])
-        return '{' + rs + '}'
+        return util.json.dumps(self.dict(), sort_keys=True, indent=2)
+
+    def dict(self):
+        return {k: v for k, v in self.__dict__.iteritems()
+                if not k.startswith('_') and not callable(v)}

@@ -1,3 +1,6 @@
+import util
+
+
 # The Session object containing the session token and some timestamps used internally
 class Session(object):
     refresh_after_secs = None
@@ -8,4 +11,8 @@ class Session(object):
         self.__dict__.update(kwargs)
 
     def __str__(self):
-        return '\ntoken: %s\nexpires_in_secs: %s\nrefresh_after_secs: %s\n' % (self.token, self.expires_in_secs, self.refresh_after_secs);
+        return util.json.dumps(self.dict(), sort_keys=True, indent=2)
+
+    def dict(self):
+        return {k: v for k, v in self.__dict__.iteritems()
+                if not k.startswith('_') and not callable(v)}

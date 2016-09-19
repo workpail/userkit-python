@@ -1,3 +1,6 @@
+import util
+
+
 class User(object):
     # class field
     mutable_fields = ['username', 'email', 'name', 'password', 'auth_type']
@@ -16,20 +19,11 @@ class User(object):
         self.__dict__.update(kwargs)
 
     def __str__(self):
-        rs = ''
-        klist = sorted(self.__dict__.keys())
-        for key in klist:
-            if rs is not '':
-                rs += ', '
-            rs += "'%s': '%s'" % (key, self.__dict__[key])
-        return '{' + rs + '}'
+        return util.json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
-        rsDict = {}
-        for key, value in self.__dict__.iteritems():
-            if not key.startswith('__') and (key != '_NQ') and not callable(value):
-                rsDict[key] = value
-        return rsDict
+        return {k: v for k, v in self.__dict__.iteritems()
+                if not k.startswith('_') and not callable(v)}
 
     def update_dict(self, dict):
         self.__dict__.update(dict)
