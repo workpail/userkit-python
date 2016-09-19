@@ -38,7 +38,7 @@ class UserManager(object):
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
-        uri = '/v1/users'
+        uri = '/users'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
         user = User(self._NQ, **result_dict)
         return user
@@ -51,7 +51,7 @@ class UserManager(object):
         if tfcode:
             post_data['code'] = tfcode
 
-        uri = '/v1/users/login'
+        uri = '/users/login'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
 
         session = Session(**result_dict)
@@ -61,7 +61,7 @@ class UserManager(object):
         if not token:
             return False
 
-        uri = '/v1/users/logout'
+        uri = '/users/logout'
         self._NQ.request('post', uri, headers={'X-User-Token': token})
         return True
 
@@ -69,7 +69,7 @@ class UserManager(object):
         if not token:
             return None
 
-        uri = '/v1/users/by_token'
+        uri = '/users/by_token'
         result_dict = self._NQ.request('get', uri, headers={'X-User-Token': token})
         user = User(self._NQ, **result_dict)
         return user
@@ -78,7 +78,7 @@ class UserManager(object):
         if not user_id:
             return None
 
-        uri = '/v1/users/%s' % user_id
+        uri = '/users/%s' % user_id
         result_dict = self._NQ.request('get', uri)
         return User(self._NQ, **result_dict)
 
@@ -87,7 +87,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/request_password_reset'
+            uri = '/users/request_password_reset'
             self._NQ.request('post', uri, post_data={'username_or_email': username_or_email})
             return True
         except error.ParseError:
@@ -99,7 +99,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/password_reset_new_password'
+            uri = '/users/password_reset_new_password'
             self._NQ.request('post', uri, post_data={'token': pw_reset_token, 'password': new_password})
             return True
         except error.ParseError:
@@ -118,7 +118,7 @@ class UserManager(object):
         # if show_disabled:
         #     uri_params["show_disabled"] = show_disabled
 
-        uri = '/v1/users'
+        uri = '/users'
         result_list = self._NQ.request('get', uri, uri_params=uri_params)
         user_list = UserList()
         for user_dict in result_list.get('users', []):
@@ -138,7 +138,7 @@ class UserManager(object):
             post_data['phone_token'] = phone_token
 
         try:
-            uri = '/v1/users/%s/auth_type' % user_id
+            uri = '/users/%s/auth_type' % user_id
             result_dict = self._NQ.request('post', uri, post_data=post_data)
             return result_dict.get('success', False) is True
         except error.ParseError:
@@ -150,7 +150,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/request_phone_verification_code'
+            uri = '/users/request_phone_verification_code'
             result_dict = self._NQ.request('post', uri,
                 post_data={'phone': phone_number, 'send_method': send_method})
             return result_dict.get('success', False) is True
@@ -163,7 +163,7 @@ class UserManager(object):
             return None
 
         try:
-            uri = '/v1/users/verify_phone'
+            uri = '/users/verify_phone'
             result_dict = self._NQ.request('post', uri,
                 post_data={'phone': phone_number, 'code': verification_code})
             if result_dict.get('verified', False) is True:
@@ -178,7 +178,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/%s/verify_phone_for_user' % user_id
+            uri = '/users/%s/verify_phone_for_user' % user_id
             result_dict = self._NQ.request('post', uri,
                 post_data={'phone': phone_number, 'code': verification_code})
             return result_dict.get('verified', False) is True
@@ -191,7 +191,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/request_email_verification_code'
+            uri = '/users/request_email_verification_code'
             result_dict = self._NQ.request('post', uri, post_data={'email' : email_address})
             return result_dict.get('success', False) is True
         except error.ParseError:
@@ -203,7 +203,7 @@ class UserManager(object):
             return None
 
         try:
-            uri = '/v1/users/verify_email'
+            uri = '/users/verify_email'
             result_dict = self._NQ.request('post', uri, post_data={'email': email_address, 'code': verification_code})
             if result_dict.get('verified', False) is True:
                 return result_dict.get('verified_email_token')
@@ -217,7 +217,7 @@ class UserManager(object):
             return False
 
         try:
-            uri = '/v1/users/%s/verify_email_for_user' % user_id
+            uri = '/users/%s/verify_email_for_user' % user_id
             result_dict = self._NQ.request('post', uri, post_data={'email': email_address, 'code': verification_code})
             return result_dict.get('verified', False) is True
         except error.ParseError:

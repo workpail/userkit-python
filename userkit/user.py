@@ -29,7 +29,7 @@ class User(object):
         self.__dict__.update(dict)
 
     def save(self):
-        uri = '/v1/users/%s' % self.id
+        uri = '/users/%s' % self.id
         post_data = {}
         for field in self.mutable_fields:
             val = self.__dict__.get(field)
@@ -41,7 +41,7 @@ class User(object):
         return True
 
     def disable(self, disable_mode):
-        uri = '/v1/users/%s/disable' % self.id
+        uri = '/users/%s/disable' % self.id
 
         result_dict = self._NQ.request('post', uri, post_data={'disabled' : disable_mode})
         self.__dict__.update(result_dict)

@@ -17,10 +17,10 @@ class UserKit(object):
             raise TypeError('api_key cannot be blank.')
 
         if api_base_url is None:
-            api_base_url = 'https://api.userkit.io'
+            api_base_url = 'https://api.userkit.io/v1'
 
         self.api_key = api_key
-        self.api_base_url = api_base_url
+        self.api_base_url = api_base_url + '/v1'
 
         # make the encapsulated objects
         self._NQ = _requestor or Requestor(self.api_key, self.api_base_url)

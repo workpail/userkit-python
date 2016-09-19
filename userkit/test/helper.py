@@ -154,43 +154,43 @@ class MockRequestor(object):
         # GET
         if method == 'get':
             # List users
-            if uri == '/v1/users':
+            if uri == '/users':
                 return DUMMY_USER_LIST
             # Refresh session token
-            elif uri == '/v1/users/auth_token':
+            elif uri == '/users/auth_token':
                 return DUMMY_SESSION
             # Get a user
-            elif uri.startswith('/v1/users/'):
+            elif uri.startswith('/users/'):
                 return DUMMY_USER
 
         # POST
         if method == 'post':
             # Request phone verification, returns success flag
-            if uri == '/v1/users/request_phone_verification_code':
+            if uri == '/users/request_phone_verification_code':
                 return DUMMY_SUCCESS
 
             # Request email verification, returns success flag
-            elif uri == '/v1/users/request_email_verification_code':
+            elif uri == '/users/request_email_verification_code':
                 return DUMMY_SUCCESS
 
             # Verify phone, returns verification-success token
-            elif uri == '/v1/users/verify_phone':
+            elif uri == '/users/verify_phone':
                 return DUMMY_VERIFIED_PHONE_SUCCESS
 
             # Verify email, returns verification-success token
-            elif uri == '/v1/users/verify_email':
+            elif uri == '/users/verify_email':
                 return DUMMY_VERIFIED_EMAIL_SUCCESS
 
             # Login returns a session token
-            elif uri == '/v1/users/login':
+            elif uri == '/users/login':
                 return DUMMY_SESSION
 
             # Logout returns a success flag
-            elif uri == '/v1/users/logout':
+            elif uri == '/users/logout':
                 return DUMMY_SUCCESS
 
             # User endpoints containing the DUMMY_USER's id
-            elif uri.startswith('/v1/users'):
+            elif uri.startswith('/users'):
                 if DUMMY_USER['id'] in uri:
 
                     if uri.endswith('/disable'):
@@ -220,18 +220,18 @@ class MockRequestor(object):
 
         # Invites -----------------------------------------------------
 
-        if uri.startswith('/v1/invites'):
+        if uri.startswith('/invites'):
 
-            if uri == '/v1/invites':
+            if uri == '/invites':
                 if method == 'post':
                     return DUMMY_INVITE_CREATE
                 elif method == 'get':
                     return DUMMY_INVITES_LIST
 
-            elif uri == '/v1/invites/send' and method == 'post':
+            elif uri == '/invites/send' and method == 'post':
                 return DUMMY_INVITE
 
-            elif uri == '/v1/invites/accept' and method == 'post':
+            elif uri == '/invites/accept' and method == 'post':
                 return DUMMY_ACCEPTED_INVITE
 
             elif uri.endswith(DUMMY_INVITE['id']) and method == 'get':

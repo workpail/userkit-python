@@ -20,7 +20,7 @@ class InviteManager(object):
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
-        uri = '/v1/invites'
+        uri = '/invites'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
         iv = Invite(self._NQ, **result_dict)
         return iv
@@ -34,7 +34,7 @@ class InviteManager(object):
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
                 post_data[field] = kwargs.get(field)
 
-        uri = '/v1/invites/send'
+        uri = '/invites/send'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
         iv = Invite(self._NQ, **result_dict)
         return iv
@@ -43,7 +43,7 @@ class InviteManager(object):
         if not invite_id:
             return None
 
-        uri = '/v1/invites/%s' % invite_id
+        uri = '/invites/%s' % invite_id
         result_dict = self._NQ.request('get', uri)
         iv = Invite(self._NQ, **result_dict)
         return iv
@@ -55,7 +55,7 @@ class InviteManager(object):
         if next_page:
             uri_params['next_page'] = next_page
 
-        uri = '/v1/invites'
+        uri = '/invites'
         result_list = self._NQ.request('get', uri, uri_params=uri_params)
 
         invite_list = InviteList()
@@ -69,7 +69,7 @@ class InviteManager(object):
         if not user_id or not token:
             return None
 
-        uri = '/v1/invites/accept'
+        uri = '/invites/accept'
         result_dict = self._NQ.request(
             'post', uri, post_data={'user_id': user_id, 'token': token})
         iv = Invite(self._NQ, **result_dict)
