@@ -68,6 +68,77 @@ DUMMY_VERIFIED_EMAIL_SUCCESS = json.loads("""{
 DUMMY_VERIFIED_EMAIL_OR_PHONE_FOR_USER_SUCCESS = json.loads(
     """{"verified": true}""")
 
+DUMMY_INVITE_CREATE = json.loads("""{
+    "token_raw": "invt_efmdqzGf32u77a-fli38NZGgR4jwU8gFDsq8KzV",
+    "app_id": "app_6fa64vtE",
+    "from_user": null,
+    "accepted": false,
+    "id": "invt_efmdqzGf32u77a",
+    "expires_secs": 604800,
+    "to_email": "anne.doe@example.com",
+    "invite_url": "https://api.userkit.io/hosted_widget?app=app_6fa64vtE&amp;invt=invt_efmdqzGf32u77a-fli38NZGgR4jwU8gFDsq8KzV",
+    "created": 1474248184.9626,
+    "extras": null,
+    "accepted_user": null,
+    "accepted_date": null
+}""")
+
+DUMMY_INVITE = json.loads("""{
+    "expires_secs": 604800,
+    "to_email": "anne.doe@example.com",
+    "accepted": false,
+    "accepted_date": null,
+    "created": 1474248184.9626,
+    "accepted_user": null,
+    "from_user": null,
+    "id": "invt_efmdqzGf32u77a",
+    "extras": null,
+    "app_id": "app_6fa64vtE"
+}""")
+
+DUMMY_ACCEPTED_INVITE = json.loads("""{
+    "expires_secs": 604800,
+    "to_email": "james.doe@example.com",
+    "accepted": true,
+    "accepted_date": 1474297100.8381801,
+    "created": 1474296046.0643599,
+    "accepted_user": "usr_wojdQ286VOvSzA",
+    "from_user": null,
+    "id": "invt_y4GQk4GwfMFrlD",
+    "extras": null,
+    "app_id": "app_6fa64vtE"
+}""")
+
+DUMMY_INVITES_LIST = json.loads("""{
+    "next_page": null,
+    "invites": [
+        {
+            "expires_secs": 604800,
+            "to_email": "anne.doe@example.com",
+            "accepted": false,
+            "accepted_date": null,
+            "created": 1474248184.9626,
+            "accepted_user": null,
+            "from_user": null,
+            "id": "invt_efmdqzGf32u77a",
+            "extras": null,
+            "app_id": "app_6fa64vtE"
+        },
+        {
+            "expires_secs": 604800,
+            "to_email": "james.doe@example.com",
+            "accepted": false,
+            "accepted_date": null,
+            "created": 1474296046.0643599,
+            "accepted_user": null,
+            "from_user": null,
+            "id": "invt_y4GQk4GwfMFrlD",
+            "extras": null,
+            "app_id": "app_6fa64vtE"
+        }
+    ]
+}""")
+
 
 class MockRequestor(object):
     """MockRequestor pretends to be the requestor.Requestor class.
@@ -78,6 +149,8 @@ class MockRequestor(object):
     """
 
     def request(self, method, uri, headers=None, uri_params=None, post_data=None):
+        # Users -------------------------------------------------------
+
         # GET
         if method == 'get':
             # List users
@@ -144,3 +217,24 @@ class MockRequestor(object):
 
                     return u
                 return DUMMY_USER
+
+        # Invites -----------------------------------------------------
+
+        if uri.startswith('/v1/invites'):
+
+            if uri == '/v1/invites':
+                if method == 'post':
+                    return DUMMY_INVITE_CREATE
+                elif method == 'get':
+                    return DUMMY_INVITES_LIST
+
+            elif uri == '/v1/invites/send' and method == 'post':
+                return DUMMY_INVITE
+
+            elif uri == '/v1/invites/accept' and method == 'post':
+                return DUMMY_ACCEPTED_INVITE
+
+            elif uri.endswith(DUMMY_INVITE['id']) and method == 'get':
+                return DUMMY_INVITE
+
+        raise ValueError("No matching URI.  %s: %s" % (method, uri))
