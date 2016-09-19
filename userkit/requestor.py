@@ -7,13 +7,10 @@ from http_client import new_default_http_client
 
 
 class Requestor(object):
+    
     def __init__(self, api_key=None, api_base_url=None):
-        self.app_id = None
-        self.app_secret_key = None
         self.api_key = api_key
         self.api_base_url = api_base_url
-        if self.api_key is not None:
-            (self.app_id, self.app_secret_key) = self.api_key.split(':')
 
         # we create ONE instance of an http handler
         self.authorization = None
@@ -22,8 +19,6 @@ class Requestor(object):
     def __del__(self):
         self.api_key = None
         self.api_base_url = None
-        self.app_id = None
-        self.app_secret_key = None
         self.authorization = None
 
     def create_headers(self, headers):
@@ -39,9 +34,6 @@ class Requestor(object):
         return request_headers
 
     def request(self, method, uri, headers=None, uri_params=None, post_data=None):
-        if self.app_id is None:
-            (self.app_id, self.app_secret_key) = self.api_key.split(':')
-
         url = '%s%s' % (self.api_base_url, uri)
         headers = self.create_headers(headers)
 
