@@ -55,6 +55,19 @@ DUMMY_SESSION = json.loads("""{
 
 DUMMY_SUCCESS = json.loads("""{"success": true}""")
 
+DUMMY_VERIFIED_PHONE_SUCCESS = json.loads("""{
+    "verified": true,
+    "verified_phone_token": "hIFg38faFhBLSx87fah9p"
+}""")
+
+DUMMY_VERIFIED_EMAIL_SUCCESS = json.loads("""{
+    "verified": true,
+    "verified_email_token": "aF9phIFghBfaLSx8h738f"
+}""")
+
+DUMMY_VERIFIED_EMAIL_OR_PHONE_FOR_USER_SUCCESS = json.loads(
+    """{"verified": true}""")
+
 
 class MockRequestor(object):
     """MockRequestor pretends to be the requestor.Requestor class.
@@ -79,24 +92,55 @@ class MockRequestor(object):
 
         # POST
         if method == 'post':
+            # Request phone verification, returns success flag
+            if uri == '/v1/users/request_phone_verification_code':
+                return DUMMY_SUCCESS
+
+            # Request email verification, returns success flag
+            elif uri == '/v1/users/request_email_verification_code':
+                return DUMMY_SUCCESS
+
+            # Verify phone, returns verification-success token
+            elif uri == '/v1/users/verify_phone':
+                return DUMMY_VERIFIED_PHONE_SUCCESS
+
+            # Verify email, returns verification-success token
+            elif uri == '/v1/users/verify_email':
+                return DUMMY_VERIFIED_EMAIL_SUCCESS
+
             # Login returns a session token
-            if uri == '/v1/users/login':
+            elif uri == '/v1/users/login':
                 return DUMMY_SESSION
+
             # Logout returns a success flag
             elif uri == '/v1/users/logout':
                 return DUMMY_SUCCESS
-            # Create and update endpoints both return a user
+
+            # User endpoints containing the DUMMY_USER's id
             elif uri.startswith('/v1/users'):
                 if DUMMY_USER['id'] in uri:
-                    u = DUMMY_USER.copy()
+
                     if uri.endswith('/disable'):
                         # This is a set-disabled state request, returns user
+                        u = DUMMY_USER.copy()
                         u['disabled'] = post_data['disabled']
+
                     elif uri.endswith('/auth_type'):
                         # This is a set-auth-type request, returns success flag
                         return DUMMY_SUCCESS
+
+                    elif uri.endswith('/verify_phone_for_user'):
+                        # Verify phone for user, returns verified success flag
+                        return DUMMY_VERIFIED_EMAIL_OR_PHONE_FOR_USER_SUCCESS
+
+                    elif uri.endswith('/verify_email_for_user'):
+                        # Verify email for user, returns verified success flag
+                        return DUMMY_VERIFIED_EMAIL_OR_PHONE_FOR_USER_SUCCESS
+
                     else:
                         # This is an update
+                        u = DUMMY_USER.copy()
                         u.update(post_data)
+
                     return u
                 return DUMMY_USER

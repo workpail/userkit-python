@@ -1,15 +1,9 @@
-import unittest
-import userkit
-import helper
-from helper import DUMMY_SESSION, DUMMY_USER, DUMMY_SUCCESS
-from helper import DUMMY_USER_LIST
+from base_test import BaseTestCase
+from helper import DUMMY_SESSION, DUMMY_USER, DUMMY_VERIFIED_PHONE_SUCCESS
+from helper import DUMMY_VERIFIED_EMAIL_SUCCESS
 
 
-class TestUsers(unittest.TestCase):
-
-    def setUp(self):
-        self.uk = userkit.UserKit('fake-a:pi-key',
-                                  _requestor=helper.MockRequestor())
+class TestUsers(BaseTestCase):
 
     def test_get_user(self):
         user = self.uk.users.fetch_user_by_userid(DUMMY_USER['id'])
@@ -62,4 +56,38 @@ class TestUsers(unittest.TestCase):
     def test_set_user_auth_type(self):
         success = self.uk.users.assign_user_auth_type(
             DUMMY_USER['id'], 'two_factor')
+        self.assertTrue(success)
+
+
+class TestVerification(BaseTestCase):
+
+    def test_send_phone_verification_code(self):
+        success = self.uk.users.request_phone_verification_code(
+            '+15555555555', 'sms')
+        self.assertTrue(success)
+
+    def test_send_email_verification_code(self):
+        success = self.uk.users.request_email_verification_code(
+            'fake@example.com')
+        self.assertTrue(success)
+
+    def test_verify_phone(self):
+        success_token = self.uk.users.verify_phone('+15555555555', 'fake-code')
+        self.assertEqual(success_token,
+                         DUMMY_VERIFIED_PHONE_SUCCESS['verified_phone_token'])
+
+    def test_verify_email(self):
+        success_token = self.uk.users.verify_email('fake@example.com',
+                                                   'fake-code')
+        self.assertEqual(success_token,
+                         DUMMY_VERIFIED_EMAIL_SUCCESS['verified_email_token'])
+
+    def test_verify_phone_for_user(self):
+        success = self.uk.users.verify_phone_for_user(DUMMY_USER['id'],
+                                                '+15555555555', 'fake-code')
+        self.assertTrue(success)
+
+    def test_email_phone_for_user(self):
+        success = self.uk.users.verify_email_for_user(
+            DUMMY_USER['id'], 'fake@example.com', 'fake-code')
         self.assertTrue(success)
