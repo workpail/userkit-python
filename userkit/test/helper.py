@@ -144,8 +144,8 @@ class MockRequestor(object):
     """MockRequestor pretends to be the requestor.Requestor class.
 
     It returns the right kind of data for each API endpoint. For
-    example a GET request to /users/<user-id> endpoint will return a
-    user dict.
+    example a GET request to /users/<dummy-user-id> endpoint will
+    return a user dict.
     """
 
     def request(self, method, uri, headers=None, uri_params=None, post_data=None):
@@ -165,12 +165,22 @@ class MockRequestor(object):
 
         # POST
         if method == 'post':
+
+            if uri == '/users':
+                return DUMMY_USER
+
             # Request phone verification, returns success flag
-            if uri == '/users/request_phone_verification_code':
+            elif uri == '/users/request_phone_verification_code':
                 return DUMMY_SUCCESS
 
             # Request email verification, returns success flag
             elif uri == '/users/request_email_verification_code':
+                return DUMMY_SUCCESS
+
+            elif uri == '/users/request_password_reset':
+                return DUMMY_SUCCESS
+
+            elif uri == '/users/password_reset_new_password':
                 return DUMMY_SUCCESS
 
             # Verify phone, returns verification-success token
@@ -191,12 +201,14 @@ class MockRequestor(object):
 
             # User endpoints containing the DUMMY_USER's id
             elif uri.startswith('/users'):
+
                 if DUMMY_USER['id'] in uri:
 
                     if uri.endswith('/disable'):
                         # This is a set-disabled state request, returns user
                         u = DUMMY_USER.copy()
                         u['disabled'] = post_data['disabled']
+                        return u
 
                     elif uri.endswith('/auth_type'):
                         # This is a set-auth-type request, returns success flag
@@ -210,13 +222,11 @@ class MockRequestor(object):
                         # Verify email for user, returns verified success flag
                         return DUMMY_VERIFIED_EMAIL_OR_PHONE_FOR_USER_SUCCESS
 
-                    else:
+                    elif uri.endswith(DUMMY_USER['id']):
                         # This is an update
                         u = DUMMY_USER.copy()
                         u.update(post_data)
-
-                    return u
-                return DUMMY_USER
+                        return u
 
         # Invites -----------------------------------------------------
 

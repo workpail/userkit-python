@@ -12,9 +12,6 @@ class InviteManager(object):
         self._NQ = nq
 
     def create_invite(self, **kwargs):
-        if not kwargs:
-            return None
-
         post_data = {}
         for field in Invite._create_fields:
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
@@ -26,9 +23,6 @@ class InviteManager(object):
         return iv
 
     def send_invite(self, **kwargs):
-        if not kwargs:
-            return None
-
         post_data = {}
         for field in Invite._create_fields:
             if kwargs.has_key(field) and (kwargs.get(field) is not None):
@@ -40,9 +34,6 @@ class InviteManager(object):
         return iv
 
     def fetch_invite(self, invite_id):
-        if not invite_id:
-            return None
-
         uri = '/invites/%s' % invite_id
         result_dict = self._NQ.request('get', uri)
         iv = Invite(self._NQ, **result_dict)
@@ -66,9 +57,6 @@ class InviteManager(object):
         return invite_list
 
     def accept_invite(self, user_id, token):
-        if not user_id or not token:
-            return None
-
         uri = '/invites/accept'
         result_dict = self._NQ.request(
             'post', uri, post_data={'user_id': user_id, 'token': token})
