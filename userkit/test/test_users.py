@@ -40,8 +40,7 @@ class TestUsers(BaseTestCase):
         # Test the user.disable() method
         user = self.uk.users.fetch_user(DUMMY_USER['id'])
         disabled = False
-        success = user.disable(disabled)
-        self.assertTrue(success)
+        user.disable(disabled)
         self.assertEqual(user.disabled, disabled)
 
     def test_login_user(self):
@@ -49,26 +48,33 @@ class TestUsers(BaseTestCase):
         self.assertEqual(session.token, DUMMY_SESSION['token'])
 
     def test_logout_user(self):
-        success = self.uk.users.logout_user('fake-token')
-        self.assertTrue(success)
+        try:
+            self.uk.users.logout_user('fake-token')
+        except Exception as e:
+            self.fail(e)
 
     def test_get_current_user(self):
         user = self.uk.users.get_current_user('fake-token')
         self.assertEqual(user.email, DUMMY_USER['email'])
 
     def test_request_password_reset(self):
-        success = self.uk.users.request_password_reset(DUMMY_USER['email'])
-        self.assertTrue(success)
+        try:
+            self.uk.users.request_password_reset(DUMMY_USER['email'])
+        except Exception as e:
+            self.fail(e)
 
     def test_pwreset_new_password(self):
-        success = self.uk.users.reset_password('fake-pw-reset-token',
-                                               'fake-new-pass')
-        self.assertTrue(success)
+        try:
+            self.uk.users.reset_password('fake-pw-reset-token',
+                                                   'fake-new-pass')
+        except Exception as e:
+            self.fail(e)
 
     def test_set_user_auth_type(self):
-        success = self.uk.users.set_user_auth_type(
-            DUMMY_USER['id'], 'two_factor')
-        self.assertTrue(success)
+        try:
+            self.uk.users.set_user_auth_type(DUMMY_USER['id'], 'two_factor')
+        except Exception as e:
+            self.fail(e)
 
     def test_refresh_session(self):
         session = self.uk.users.refresh_session('fake-session-token')
@@ -88,14 +94,18 @@ class TestUsers(BaseTestCase):
 class TestVerification(BaseTestCase):
 
     def test_send_phone_verification_code(self):
-        success = self.uk.users.request_phone_verification_code(
-            '+15555555555', 'sms')
-        self.assertTrue(success)
+        try:
+            self.uk.users.request_phone_verification_code(
+                '+15555555555', 'sms')
+        except Exception as e:
+            self.fail(e)
 
     def test_send_email_verification_code(self):
-        success = self.uk.users.request_email_verification_code(
-            'fake@example.com')
-        self.assertTrue(success)
+        try:
+            self.uk.users.request_email_verification_code(
+                'fake@example.com')
+        except Exception as e:
+            self.fail(e)
 
     def test_verify_phone(self):
         success_token = self.uk.users.verify_phone('+15555555555', 'fake-code')
@@ -109,14 +119,18 @@ class TestVerification(BaseTestCase):
                          DUMMY_VERIFIED_EMAIL_SUCCESS['verified_email_token'])
 
     def test_verify_phone_for_user(self):
-        success = self.uk.users.verify_phone_for_user(DUMMY_USER['id'],
+        try:
+            self.uk.users.verify_phone_for_user(DUMMY_USER['id'],
                                                 '+15555555555', 'fake-code')
-        self.assertTrue(success)
+        except Exception as e:
+            self.fail(e)
 
     def test_email_phone_for_user(self):
-        success = self.uk.users.verify_email_for_user(
-            DUMMY_USER['id'], 'fake@example.com', 'fake-code')
-        self.assertTrue(success)
+        try:
+            self.uk.users.verify_email_for_user(
+                DUMMY_USER['id'], 'fake@example.com', 'fake-code')
+        except Exception as e:
+            self.fail(e)
 
 
 class TestSession(BaseTestCase):

@@ -57,7 +57,6 @@ class UserManager(object):
     def logout_user(self, token):
         uri = '/users/logout'
         self._NQ.request('post', uri, headers={'X-User-Token': token})
-        return True
 
     def fetch_user_by_session(self, token):
         uri = '/users/by_token'
@@ -75,13 +74,11 @@ class UserManager(object):
         uri = '/users/request_password_reset'
         self._NQ.request('post', uri,
                     post_data={'username_or_email': username_or_email})
-        return True
 
     def reset_password(self, pw_reset_token, new_password):
         uri = '/users/password_reset_new_password'
         self._NQ.request('post', uri,
             post_data={'token': pw_reset_token, 'password': new_password})
-        return True
 
     def fetch_users(self, limit=25, next_page=None):
         uri_params = {}
@@ -108,14 +105,12 @@ class UserManager(object):
             post_data['phone_token'] = phone_token
 
         uri = '/users/%s/auth_type' % user_id
-        result_dict = self._NQ.request('post', uri, post_data=post_data)
-        return result_dict.get('success', False) is True
+        self._NQ.request('post', uri, post_data=post_data)
 
     def request_phone_verification_code(self, phone_number, send_method='sms'):
         uri = '/users/request_phone_verification_code'
-        result_dict = self._NQ.request('post', uri,
+        self._NQ.request('post', uri,
             post_data={'phone': phone_number, 'send_method': send_method})
-        return result_dict.get('success', False) is True
 
     def verify_phone(self, phone_number, verification_code):
         uri = '/users/verify_phone'
@@ -133,9 +128,7 @@ class UserManager(object):
 
     def request_email_verification_code(self, email_address):
         uri = '/users/request_email_verification_code'
-        result_dict = self._NQ.request(
-            'post', uri, post_data={'email': email_address})
-        return result_dict.get('success', False) is True
+        self._NQ.request('post', uri, post_data={'email': email_address})
 
     def verify_email(self, email_address, verification_code):
         uri = '/users/verify_email'
