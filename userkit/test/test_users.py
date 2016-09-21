@@ -21,6 +21,11 @@ class TestUsers(BaseTestCase):
 
     def test_update_user(self):
         new_name = "The New Name"
+        user = self.uk.users.update_user(DUMMY_USER['id'], name=new_name)
+        self.assertEqual(user.name, new_name)
+
+    def test_save_user(self):
+        new_name = "The New Name"
         user = self.uk.users.fetch_user(DUMMY_USER['id'])
         user.name = new_name
         user.save()

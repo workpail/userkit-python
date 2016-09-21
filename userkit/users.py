@@ -32,6 +32,17 @@ class UserManager(object):
         user = User(self._NQ, **result_dict)
         return user
 
+    def update_user(self, user_id, **kwargs):
+        post_data = {}
+        for field in User._mutable_fields:
+            if kwargs.has_key(field) and (kwargs.get(field) is not None):
+                post_data[field] = kwargs.get(field)
+
+        uri = '/users/{}'.format(user_id)
+        result_dict = self._NQ.request('post', uri, post_data=post_data)
+        user = User(self._NQ, **result_dict)
+        return user
+
     def login_user(self, username, password, tfcode=None):
         post_data = {'username': username, 'password': password}
         if tfcode:
