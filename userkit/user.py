@@ -32,9 +32,8 @@ class User(object):
         uri = '/users/%s' % self.id
         post_data = {}
         for field in self._mutable_fields:
-            val = self.__dict__.get(field)
-            if val is not None:
-                post_data[field] = val
+            if field in self.__dict__:
+                post_data[field] = self.__dict__.get(field)
 
         result_dict = self._NQ.request('post', uri, post_data=post_data)
         self.__dict__.update(result_dict)
