@@ -157,3 +157,10 @@ class UserManager(object):
             'post', uri, post_data={'disabled': disabled})
         user = User(self._NQ, **result_dict)
         return user
+
+    def refresh_session(self, session_token):
+        uri = '/users/auth_token'
+        result_dict = self._NQ.request('get', uri,
+                                       headers={'X-User-Token': session_token})
+        session = Session(**result_dict)
+        return session

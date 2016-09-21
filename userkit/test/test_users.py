@@ -70,6 +70,11 @@ class TestUsers(BaseTestCase):
             DUMMY_USER['id'], 'two_factor')
         self.assertTrue(success)
 
+    def test_refresh_session(self):
+        session = self.uk.users.refresh_session('fake-session-token')
+        self.assertTrue(hasattr(session, 'token'))
+        self.assertTrue(hasattr(session, 'expires_in_secs'))
+
     # Utility methods
 
     def test_user__str__method(self):
