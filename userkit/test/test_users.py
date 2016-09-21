@@ -31,6 +31,19 @@ class TestUsers(BaseTestCase):
         user.save()
         self.assertEqual(user.name, new_name)
 
+    def test_disable_user(self):
+        # Test the disable_user() function
+        disabled = True
+        user = self.uk.users.disable_user(DUMMY_USER['id'], disabled)
+        self.assertEqual(user.disabled, disabled)
+
+        # Test the user.disable() method
+        user = self.uk.users.fetch_user(DUMMY_USER['id'])
+        disabled = False
+        success = user.disable(disabled)
+        self.assertTrue(success)
+        self.assertEqual(user.disabled, disabled)
+
     def test_login_user(self):
         session = self.uk.users.login_user('fake@example.com', 'pass1234')
         self.assertEqual(session.token, DUMMY_SESSION['token'])
@@ -51,12 +64,6 @@ class TestUsers(BaseTestCase):
         success = self.uk.users.reset_password('fake-pw-reset-token',
                                                'fake-new-pass')
         self.assertTrue(success)
-
-    def test_disable_user(self):
-        user = self.uk.users.fetch_user(DUMMY_USER['id'])
-        success = user.disable(True)
-        self.assertTrue(success)
-        self.assertEqual(user.disabled, True)
 
     def test_set_user_auth_type(self):
         success = self.uk.users.set_user_auth_type(

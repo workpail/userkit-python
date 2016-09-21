@@ -150,3 +150,10 @@ class UserManager(object):
         result_dict = self._NQ.request('post', uri,
             post_data={'email': email_address, 'code': verification_code})
         return result_dict.get('verified', False) is True
+
+    def disable_user(self, user_id, disabled=True):
+        uri = '/users/{}/disable'.format(user_id)
+        result_dict = self._NQ.request(
+            'post', uri, post_data={'disabled': disabled})
+        user = User(self._NQ, **result_dict)
+        return user
