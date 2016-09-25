@@ -24,8 +24,8 @@ class UserManager(object):
     def create_user(self, **kwargs):
         post_data = {}
         for field in User._mutable_fields:
-            if kwargs.has_key(field) and (kwargs.get(field) is not None):
-                post_data[field] = kwargs.get(field)
+            if field in kwargs:
+                post_data[field] = kwargs[field]
 
         uri = '/users'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
@@ -35,8 +35,8 @@ class UserManager(object):
     def update_user(self, user_id, **kwargs):
         post_data = {}
         for field in User._mutable_fields:
-            if kwargs.has_key(field) and (kwargs.get(field) is not None):
-                post_data[field] = kwargs.get(field)
+            if field in kwargs:
+                post_data[field] = kwargs[field]
 
         uri = '/users/{}'.format(user_id)
         result_dict = self._NQ.request('post', uri, post_data=post_data)
