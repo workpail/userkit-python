@@ -27,7 +27,7 @@ user = uk.users.create_user(email="jane.smith@example.com",
                             password="secretpass")
 
 # Fetch a user
-user = uk.users.fetch_user("<USER_ID>")
+user = uk.users.get_user("<USER_ID>")
 
 # Update a user
 user = uk.users.update_user("<USER_ID>", name="Jane Smith")

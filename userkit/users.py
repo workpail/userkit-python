@@ -17,7 +17,7 @@ class UserManager(object):
         if not token:
             return None
         try:
-            return self.fetch_user_by_session(token)
+            return self.get_user_by_session(token)
         except error.RequiresLoginError:
             return None
 
@@ -58,14 +58,14 @@ class UserManager(object):
         uri = '/users/logout'
         self._NQ.request('post', uri, headers={'X-User-Token': token})
 
-    def fetch_user_by_session(self, token):
+    def get_user_by_session(self, token):
         uri = '/users/by_token'
         result_dict = self._NQ.request('get', uri,
                                        headers={'X-User-Token': token})
         user = User(self._NQ, **result_dict)
         return user
 
-    def fetch_user(self, user_id):
+    def get_user(self, user_id):
         uri = '/users/%s' % user_id
         result_dict = self._NQ.request('get', uri)
         return User(self._NQ, **result_dict)
@@ -80,7 +80,7 @@ class UserManager(object):
         self._NQ.request('post', uri,
             post_data={'token': pw_reset_token, 'password': new_password})
 
-    def fetch_users(self, limit=25, next_page=None):
+    def get_users(self, limit=25, next_page=None):
         uri_params = {}
         if limit:
             uri_params['limit'] = limit

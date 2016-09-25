@@ -14,11 +14,11 @@ class TestUsers(BaseTestCase):
     def test_get_user(self):
         u = self.uk.users.create_user(email=rand_email(),
                                       password=rand_str(14))
-        user = self.uk.users.fetch_user(u.id)
+        user = self.uk.users.get_user(u.id)
         self.assertEqual(user.id, u.id)
 
     def test_list_users(self):
-        l = self.uk.users.fetch_users()
+        l = self.uk.users.get_users()
         self.assertIsInstance(l, list)
         self.assertTrue(hasattr(l, 'next_page'))
         self.assertTrue(hasattr(l[0], 'username'))
@@ -35,7 +35,7 @@ class TestUsers(BaseTestCase):
                                       password=rand_str(14), name="Name")
         new_name = "Test Name {}".format(rand_str())
 
-        user = self.uk.users.fetch_user(u.id)
+        user = self.uk.users.get_user(u.id)
         user.name = new_name
         user.save()
         self.assertEqual(user.name, new_name)
@@ -71,7 +71,7 @@ class TestUsers(BaseTestCase):
         u = self.uk.users.create_user(email=email, password=password)
 
         session = self.uk.users.login_user(email, password)
-        user = self.uk.users.fetch_user_by_session(session.token)
+        user = self.uk.users.get_user_by_session(session.token)
         self.assertEqual(user.id, u.id)
 
     def test_get_current_user(self):
@@ -164,7 +164,7 @@ class TestUsersMock(BaseMockTestCase):
     # Utility tests ---------------------------------------------------
 
     def test_user__str__method(self):
-        user = self.uk.users.fetch_user(DUMMY_USER['id'])
+        user = self.uk.users.get_user(DUMMY_USER['id'])
         try:
             s = user.__str__()
         except Exception as e:
