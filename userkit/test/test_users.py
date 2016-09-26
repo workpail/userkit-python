@@ -2,6 +2,7 @@ from base_test import BaseTestCase, BaseMockTestCase
 from helper import DUMMY_USER, DUMMY_VERIFIED_PHONE_SUCCESS
 from helper import DUMMY_VERIFIED_EMAIL_SUCCESS
 from util import rand_str, rand_email
+from userkit import error
 
 
 class TestUsers(BaseTestCase):
@@ -16,6 +17,10 @@ class TestUsers(BaseTestCase):
                                       password=rand_str(14))
         user = self.uk.users.get_user(u.id)
         self.assertEqual(user.id, u.id)
+
+    def test_get_user_does_not_exist(self):
+        u = self.uk.users.get_user('wrong-id')
+        self.assertIsNone(u)
 
     def test_list_users(self):
         l = self.uk.users.get_users()
@@ -74,6 +79,10 @@ class TestUsers(BaseTestCase):
         user = self.uk.users.get_user_by_session(session.token)
         self.assertEqual(user.id, u.id)
 
+    def test_get_user_by_session_bad_token(self):
+        self.assertRaises(error.UserAuthenticationError,
+                          self.uk.users.get_user_by_session, 'very-bad-token')
+
     def test_get_current_user(self):
         email, password = rand_email(), rand_str(14)
         u = self.uk.users.create_user(email=email, password=password)
@@ -81,6 +90,11 @@ class TestUsers(BaseTestCase):
 
         user = self.uk.users.get_current_user(session.token)
         self.assertEqual(user.id, u.id)
+
+    def test_get_current_user_bad_token(self):
+        # Bad session token should return None
+        user = self.uk.users.get_current_user('very-bad-session')
+        self.assertIsNone(user)
 
     def test_request_password_reset(self):
         u = self.uk.users.create_user(email=rand_email(),

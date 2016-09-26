@@ -18,7 +18,7 @@ class UserManager(object):
             return None
         try:
             return self.get_user_by_session(token)
-        except error.RequiresLoginError:
+        except error.UserAuthenticationError:
             return None
 
     def create_user(self, **kwargs):
@@ -67,7 +67,10 @@ class UserManager(object):
 
     def get_user(self, user_id):
         uri = '/users/%s' % user_id
-        result_dict = self._NQ.request('get', uri)
+        try:
+            result_dict = self._NQ.request('get', uri)
+        except error.ResourceNotFoundError:
+            return None
         return User(self._NQ, **result_dict)
 
     def request_password_reset(self, username_or_email):

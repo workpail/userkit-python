@@ -58,33 +58,30 @@ class Requestor(object):
         return self.process_response(content, status_code)
 
     def process_response(self, content, status_code):
-        if status_code == 200:
-            try:
-                return util.json.loads(content)
-            except Exception as e:
-                raise error.error_by_type('json_parse_error', message=repr(e),
-                                    http_status=status_code, http_body=content)
-
-        elif status_code == 404 or status_code == 500:
-            raise error.error_by_type('http_error', http_status=status_code,
-                                      http_body=content)
-
-        # otherwise we have an error condition
         try:
-            jsonOb = util.json.loads(content)
+            json_body = util.json.loads(content)
         except Exception as e:
-            raise error.error_by_type('json_parse_error', message=repr(e),
-                                      http_status=status_code, http_body=content)
+            msg = 'Parse error: {0}. Status code: {1}'.format(e, status_code)
+            raise error.UserKitError(message=msg)
 
-        # otherwise, a non-200 code was returned along with a JSON error object
-        if jsonOb.get('error'):
-            raise error.error_by_obj(jsonOb.get('error'),
-                                http_status=status_code, http_body=content)
-        elif jsonOb.get('errors'):
-            raise error.error_by_obj_list(jsonOb.get('errors'),
-                                http_status=status_code, http_body=content)
+        if status_code == 200:
+            return json_body
+        elif status_code == 401:
+            raise error.AppAuthenticationError(json_obj=json_body)
+        elif status_code == 400:
+            if json_body['error'].get('type') == 'user_error':
+                if json_body['error'].get('code') == 'unauthorized':
+                    raise error.UserAuthenticationError(json_obj=json_body)
+                else:
+                    raise error.UserError(json_obj=json_body)
+            elif json_body['error'].get('code') == 'not_found':
+                raise error.ResourceNotFoundError(json_obj=json_body)
+            else:
+                raise error.InvalidRequestError(json_obj=json_body)
+        elif status_code == 415:
+            raise error.InvalidRequestError(json_obj=json_body)
         else:
-            raise error.error_by_type('api_error',
-                                      message='No Error Object Returned',
-                                      http_status=status_code,
-                                      http_body=content)
+            msg = ('There was an error in our servers, status code: {}. '
+                   'If this persists, please let us know at '
+                   'support@userkit.io').format(status_code)
+            raise error.APIError(message=msg)
