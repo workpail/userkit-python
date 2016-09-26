@@ -43,10 +43,10 @@ class UserManager(object):
         user = User(self._NQ, **result_dict)
         return user
 
-    def login_user(self, username, password, tfcode=None):
+    def login_user(self, username, password, code=None):
         post_data = {'username': username, 'password': password}
-        if tfcode:
-            post_data['code'] = tfcode
+        if code:
+            post_data['code'] = code
 
         uri = '/users/login'
         result_dict = self._NQ.request('post', uri, post_data=post_data)
