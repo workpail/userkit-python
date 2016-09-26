@@ -22,6 +22,10 @@ class TestInvites(BaseTestCase):
         self.assertEqual(fetched_invite.id, created_invite.id)
         self.assertEqual(fetched_invite.to_email, created_invite.to_email)
 
+    def test_get_invite_does_not_exist(self):
+        inv = self.uk.invites.get_invite('wrong-id')
+        self.assertIsNone(inv)
+
     def test_list_invites(self):
         invite_list = self.uk.invites.get_invites()
         self.assertTrue(hasattr(invite_list, 'next_page'))

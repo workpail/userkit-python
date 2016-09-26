@@ -1,4 +1,5 @@
 from invite import Invite
+import error
 
 
 class InviteList(list):
@@ -35,7 +36,10 @@ class InviteManager(object):
 
     def get_invite(self, invite_id):
         uri = '/invites/%s' % invite_id
-        result_dict = self._NQ.request('get', uri)
+        try:
+            result_dict = self._NQ.request('get', uri)
+        except error.ResourceNotFoundError:
+            return None
         iv = Invite(self._NQ, **result_dict)
         return iv
 
