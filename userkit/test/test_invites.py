@@ -18,12 +18,12 @@ class TestInvites(BaseTestCase):
     def test_get_invite(self):
         email = rand_email()
         created_invite = self.uk.invites.send_invite(to_email=email)
-        fetched_invite = self.uk.invites.fetch_invite(created_invite.id)
+        fetched_invite = self.uk.invites.get_invite(created_invite.id)
         self.assertEqual(fetched_invite.id, created_invite.id)
         self.assertEqual(fetched_invite.to_email, created_invite.to_email)
 
     def test_list_invites(self):
-        invite_list = self.uk.invites.fetch_invites()
+        invite_list = self.uk.invites.get_invites()
         self.assertTrue(hasattr(invite_list, 'next_page'))
         self.assertTrue(hasattr(invite_list[0], 'to_email'))
 
