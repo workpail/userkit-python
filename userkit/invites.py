@@ -1,4 +1,4 @@
-from invite import Invite
+from invite import Invite, INVT_CREATE_FIELDS
 import error
 
 
@@ -14,7 +14,7 @@ class InviteManager(object):
 
     def create_invite(self, **kwargs):
         post_data = {}
-        for field in Invite._create_fields:
+        for field in INVT_CREATE_FIELDS:
             if field in kwargs:
                 post_data[field] = kwargs[field]
 
@@ -25,7 +25,7 @@ class InviteManager(object):
 
     def send_invite(self, **kwargs):
         post_data = {}
-        for field in Invite._create_fields:
+        for field in INVT_CREATE_FIELDS:
             if field in kwargs:
                 post_data[field] = kwargs[field]
 

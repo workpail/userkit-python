@@ -1,11 +1,11 @@
 import util
 
 
-class Invite(object):
-    # class vars
-    _create_fields = ['to_email', 'from_user', 'expires_secs', 'extras',
+INVT_CREATE_FIELDS = ['to_email', 'from_user', 'expires_secs', 'extras',
                       'greeting', 'body', 'signature']
 
+
+class Invite(object):
     # instance vars
     id = None
     token = None

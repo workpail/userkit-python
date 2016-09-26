@@ -1,10 +1,10 @@
 import util
 
 
-class User(object):
-    # class field
-    _mutable_fields = ['username', 'email', 'name', 'password', 'auth_type']
+USR_MUTABLE_FIELDS = ['username', 'email', 'name', 'password', 'auth_type']
 
+
+class User(object):
     # instance fields
     _NQ = None
     id = None
@@ -31,7 +31,7 @@ class User(object):
     def save(self):
         uri = '/users/%s' % self.id
         post_data = {}
-        for field in self._mutable_fields:
+        for field in USR_MUTABLE_FIELDS:
             if field in self.__dict__:
                 post_data[field] = self.__dict__.get(field)
 

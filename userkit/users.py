@@ -1,4 +1,4 @@
-from user import User
+from user import User, USR_MUTABLE_FIELDS
 from session import Session
 import error as error
 
@@ -23,7 +23,7 @@ class UserManager(object):
 
     def create_user(self, **kwargs):
         post_data = {}
-        for field in User._mutable_fields:
+        for field in USR_MUTABLE_FIELDS:
             if field in kwargs:
                 post_data[field] = kwargs[field]
 
@@ -34,7 +34,7 @@ class UserManager(object):
 
     def update_user(self, user_id, **kwargs):
         post_data = {}
-        for field in User._mutable_fields:
+        for field in USR_MUTABLE_FIELDS:
             if field in kwargs:
                 post_data[field] = kwargs[field]
 
