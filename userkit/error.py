@@ -19,12 +19,11 @@ class CoreError(Exception):
         super(CoreError, self).__init__(msg)
 
         if json_obj:
-            err = json_obj.get('error')
-            self.type = err.get('type')
-            self.code = err.get('code')
-            self.param = err.get('param')
+            self.type = json_obj.get('type')
+            self.code = json_obj.get('code')
+            self.param = json_obj.get('param')
             self.message = msg
-            self.retry_wait = err.get('retry_wait')
+            self.retry_wait = json_obj.get('retry_wait')
 
     def __unicode__(self):
         return self.message
@@ -33,15 +32,17 @@ class CoreError(Exception):
 class UserKitError(CoreError):
 
     # Some endpoints return a list of multiple errors
-    errors = []
+    errors = None
 
-    def __init__(self, json_obj=None, message=None):
+    def __init__(self, json_body=None, message=None):
+        json_obj = json_body.get('error') if json_body else None
         super(UserKitError, self).__init__(json_obj=json_obj, message=message)
 
-        if json_obj:
-            errs = json_obj.get('errors', [])
+        self.errors = []
+        if json_body:
+            errs = json_body.get('errors', [])
             for e in errs:
-                self.errors.append(CoreError(e))
+                self.errors.append(CoreError(json_obj=e))
 
 
 class AppAuthenticationError(UserKitError):

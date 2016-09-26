@@ -67,19 +67,19 @@ class Requestor(object):
         if status_code == 200:
             return json_body
         elif status_code == 401:
-            raise error.AppAuthenticationError(json_obj=json_body)
+            raise error.AppAuthenticationError(json_body=json_body)
         elif status_code == 400:
             if json_body['error'].get('type') == 'user_error':
                 if json_body['error'].get('code') == 'unauthorized':
-                    raise error.UserAuthenticationError(json_obj=json_body)
+                    raise error.UserAuthenticationError(json_body=json_body)
                 else:
-                    raise error.UserError(json_obj=json_body)
+                    raise error.UserError(json_body=json_body)
             elif json_body['error'].get('code') == 'not_found':
-                raise error.ResourceNotFoundError(json_obj=json_body)
+                raise error.ResourceNotFoundError(json_body=json_body)
             else:
-                raise error.InvalidRequestError(json_obj=json_body)
+                raise error.InvalidRequestError(json_body=json_body)
         elif status_code == 415:
-            raise error.InvalidRequestError(json_obj=json_body)
+            raise error.InvalidRequestError(json_body=json_body)
         else:
             msg = ('There was an error in our servers, status code: {}. '
                    'If this persists, please let us know at '
