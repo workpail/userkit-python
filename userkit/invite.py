@@ -9,7 +9,7 @@ class Invite(object):
     # instance vars
     id = None
     token = None
-    _NQ = None
+    _rq = None
     accepted = None
     accepted_date = None
     accepted_user = None
@@ -22,8 +22,8 @@ class Invite(object):
     token_raw = None
     invite_url = None
 
-    def __init__(self, nq, **kwargs):
-        self._NQ = nq
+    def __init__(self, requestor, **kwargs):
+        self._rq = requestor
         self.__dict__.update(kwargs)
 
     def __str__(self):

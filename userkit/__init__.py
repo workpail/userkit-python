@@ -8,7 +8,7 @@ class UserKit(object):
     api_version = 1.0
     api_base_url = None
     api_key = None
-    _NQ = None
+    _rq = None
     users = None
     invites = None
 
@@ -25,9 +25,9 @@ class UserKit(object):
         self.api_base_url = api_base_url
 
         # make the encapsulated objects
-        self._NQ = _requestor or Requestor(self.api_key, self.api_base_url)
-        self.users = UserManager(self._NQ)
-        self.invites = InviteManager(self._NQ)
+        self._rq = _requestor or Requestor(self.api_key, self.api_base_url)
+        self.users = UserManager(self._rq)
+        self.invites = InviteManager(self._rq)
 
     @classmethod
     def version(cls):

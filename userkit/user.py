@@ -6,7 +6,7 @@ USR_MUTABLE_FIELDS = ['username', 'email', 'name', 'password', 'auth_type']
 
 class User(object):
     # instance fields
-    _NQ = None
+    _rq = None
     id = None
     username = None
     email = None
@@ -14,8 +14,8 @@ class User(object):
     password = None
     auth_type = None
 
-    def __init__(self, nq, **kwargs):
-        self._NQ = nq
+    def __init__(self, requestor, **kwargs):
+        self._rq = requestor
         self.__dict__.update(kwargs)
 
     def __str__(self):
@@ -35,11 +35,11 @@ class User(object):
             if field in self.__dict__:
                 post_data[field] = self.__dict__.get(field)
 
-        result_dict = self._NQ.request('post', uri, post_data=post_data)
+        result_dict = self._rq.request('post', uri, post_data=post_data)
         self.__dict__.update(result_dict)
 
     def disable(self, disable_mode):
         uri = '/users/%s/disable' % self.id
 
-        result_dict = self._NQ.request('post', uri, post_data={'disabled': disable_mode})
+        result_dict = self._rq.request('post', uri, post_data={'disabled': disable_mode})
         self.__dict__.update(result_dict)
