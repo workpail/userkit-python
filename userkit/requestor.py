@@ -69,12 +69,9 @@ class Requestor(object):
         elif status_code == 401:
             raise error.AppAuthenticationError(json_body=json_body)
         elif status_code == 400:
-            if json_body['error'].get('type') == 'user_error':
-                if json_body['error'].get('code') == 'unauthorized':
-                    raise error.UserAuthenticationError(json_body=json_body)
-                else:
-                    raise error.UserError(json_body=json_body)
-            elif json_body['error'].get('code') == 'not_found':
+            if json_body['error'].get('type') == 'user_authentication_error':
+                raise error.UserAuthenticationError(json_body=json_body)
+            elif json_body['error'].get('type') == 'resource_not_found_error':
                 raise error.ResourceNotFoundError(json_body=json_body)
             else:
                 raise error.InvalidRequestError(json_body=json_body)
