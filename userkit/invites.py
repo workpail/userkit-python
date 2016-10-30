@@ -43,6 +43,16 @@ class InviteManager(object):
         iv = Invite(self._rq, **result_dict)
         return iv
 
+    def get_by_token(self, token):
+        uri = '/invites/by_token'
+        try:
+            result_dict = self._rq.request('get', uri,
+                                           headers={'X-Invite-Token': token})
+        except error.ResourceNotFoundError:
+            return None
+        iv = Invite(self._rq, **result_dict)
+        return iv
+
     def get_invites(self, limit=25, next_page=None):
         uri_params = {}
         if limit:
