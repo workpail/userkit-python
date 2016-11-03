@@ -1,6 +1,7 @@
 from requestor import Requestor
 from users import UserManager
 from invites import InviteManager
+from emails import EmailManager
 from session import Session
 
 
@@ -11,6 +12,7 @@ class UserKit(object):
     _rq = None
     users = None
     invites = None
+    emails = None
 
     def __init__(self, api_key, api_base_url=None, _requestor=None):
         if api_key is None:
@@ -28,6 +30,7 @@ class UserKit(object):
         self._rq = _requestor or Requestor(self.api_key, self.api_base_url)
         self.users = UserManager(self._rq)
         self.invites = InviteManager(self._rq)
+        self.emails = EmailManager(self._rq)
 
     @classmethod
     def version(cls):

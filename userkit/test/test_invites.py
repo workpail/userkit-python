@@ -10,14 +10,15 @@ class TestInvites(BaseTestCase):
         self.assertEqual(invite.to_email, email.lower())
         self.assertTrue(hasattr(invite, 'token_raw'))
 
-    def test_send_invite(self):
+    def DISABLED_test_send_invite(self):
+        # TODO: re-enable after turning on send-invite endpoint again
         email = rand_email()
         invite = self.uk.invites.send_invite(to_email=email)
         self.assertEqual(invite.to_email, email.lower())
 
     def test_get_invite(self):
         email = rand_email()
-        created_invite = self.uk.invites.send_invite(to_email=email)
+        created_invite = self.uk.invites.create_invite(to_email=email)
         fetched_invite = self.uk.invites.get_invite(created_invite.id)
         self.assertEqual(fetched_invite.id, created_invite.id)
         self.assertEqual(fetched_invite.to_email, created_invite.to_email)
@@ -59,7 +60,7 @@ class TestInvites(BaseTestCase):
     # Util methods
 
     def test_invite__str__method(self):
-        invite = self.uk.invites.send_invite(to_email=rand_email())
+        invite = self.uk.invites.create_invite(to_email=rand_email())
         try:
             s = invite.__str__()
         except Exception as e:
