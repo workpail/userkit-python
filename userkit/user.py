@@ -1,7 +1,8 @@
 import util
 
 
-USR_MUTABLE_FIELDS = ['username', 'email', 'name', 'password', 'auth_type']
+USR_MUTABLE_FIELDS = ['username', 'email', 'name', 'password', 'auth_type',
+                      'extras']
 
 
 class User(object):
@@ -13,6 +14,7 @@ class User(object):
     name = None
     password = None
     auth_type = None
+    extras = None
 
     def __init__(self, requestor, **kwargs):
         self._rq = requestor

@@ -9,8 +9,11 @@ class TestUsers(BaseTestCase):
 
     def test_create_user(self):
         email = rand_email()
-        user = self.uk.users.create_user(email=email, password=rand_str(14))
+        extras = {'score': 100}
+        user = self.uk.users.create_user(email=email, password=rand_str(14),
+                                         extras=extras)
         self.assertEqual(user.email, email.lower())
+        self.assertEqual(user.extras['score'], extras['score'])
 
     def test_get_user(self):
         u = self.uk.users.create_user(email=rand_email(),
@@ -29,11 +32,15 @@ class TestUsers(BaseTestCase):
         self.assertTrue(hasattr(l[0], 'username'))
 
     def test_update_user(self):
+        extras = {'score': 200}
         u = self.uk.users.create_user(email=rand_email(),
-                                      password=rand_str(14), name="Name")
+                                      password=rand_str(14),
+                                      name="Name",
+                                      extras=extras)
         new_name = "Test Name {}".format(rand_str())
         user = self.uk.users.update_user(u.id, name=new_name)
         self.assertEqual(user.name, new_name)
+        self.assertEqual(user.extras['score'], extras['score'])
 
     def test_save_user(self):
         u = self.uk.users.create_user(email=rand_email(),
