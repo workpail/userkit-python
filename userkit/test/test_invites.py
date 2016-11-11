@@ -43,6 +43,26 @@ class TestInvites(BaseTestCase):
         fetched_invite = self.uk.invites.get_by_token(bad_token)
         self.assertIsNone(fetched_invite)
 
+    def test_get_invite_once_by_token(self):
+        email = rand_email()
+        created_invite = self.uk.invites.create_invite(to_email=email)
+        token = created_invite.token_raw
+        # Should fetch invite first time
+        fetched_invite = self.uk.invites.get_once(token)
+        self.assertIsNotNone(created_invite)
+        self.assertIsNotNone(fetched_invite)
+        self.assertEqual(fetched_invite.id, created_invite.id)
+        # Should fail second time for same invite
+        fetched_invite = self.uk.invites.get_once(token)
+        self.assertIsNone(fetched_invite)
+
+    def test_get_invite_once_bad_token(self):
+        email = rand_email()
+        created_invite = self.uk.invites.create_invite(to_email=email)
+        bad_token = created_invite.token_raw + 'bad'
+        fetched_invite = self.uk.invites.get_once(bad_token)
+        self.assertIsNone(fetched_invite)
+
     def test_list_invites(self):
         invite_list = self.uk.invites.get_invites()
         self.assertTrue(hasattr(invite_list, 'next_page'))
