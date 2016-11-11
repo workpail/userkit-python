@@ -33,7 +33,8 @@ class Requestor(object):
                                      base64.b64encode('api:%s' % self.api_key)
 
         request_headers = {
-            'Authorization': self.authorization
+            'Authorization': self.authorization,
+            'X-Escape': 'false',  # Don't escape returned JSON
         }
 
         if headers:

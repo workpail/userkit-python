@@ -6,10 +6,10 @@ from session import Session
 
 
 class UserKit(object):
+    _rq = None
     api_version = 1.0
     api_base_url = None
     api_key = None
-    _rq = None
     users = None
     invites = None
     emails = None

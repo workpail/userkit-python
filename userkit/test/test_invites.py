@@ -6,12 +6,13 @@ class TestInvites(BaseTestCase):
 
     def test_create_invite(self):
         email = rand_email()
-        extras = {'score': 100}
+        # Include an ampersand to test that data is unescaped
+        extras = {'team': 'run&jump'}
         invite = self.uk.invites.create_invite(to_email=email, extras=extras)
         self.assertEqual(invite.to_email, email.lower())
         self.assertTrue(hasattr(invite, 'token_raw'))
         self.assertIsNotNone(invite.extras)
-        self.assertEqual(invite.extras['score'], extras['score'])
+        self.assertEqual(invite.extras['team'], extras['team'])
 
     def DISABLED_test_send_invite(self):
         # TODO: re-enable after turning on send-invite endpoint again
