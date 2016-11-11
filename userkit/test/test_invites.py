@@ -6,9 +6,12 @@ class TestInvites(BaseTestCase):
 
     def test_create_invite(self):
         email = rand_email()
-        invite = self.uk.invites.create_invite(to_email=email)
+        extras = {'score': 100}
+        invite = self.uk.invites.create_invite(to_email=email, extras=extras)
         self.assertEqual(invite.to_email, email.lower())
         self.assertTrue(hasattr(invite, 'token_raw'))
+        self.assertIsNotNone(invite.extras)
+        self.assertEqual(invite.extras['score'], extras['score'])
 
     def DISABLED_test_send_invite(self):
         # TODO: re-enable after turning on send-invite endpoint again
@@ -18,10 +21,13 @@ class TestInvites(BaseTestCase):
 
     def test_get_invite(self):
         email = rand_email()
-        created_invite = self.uk.invites.create_invite(to_email=email)
+        extras = {'score': 200}
+        created_invite = self.uk.invites.create_invite(to_email=email,
+                                                       extras=extras)
         fetched_invite = self.uk.invites.get_invite(created_invite.id)
         self.assertEqual(fetched_invite.id, created_invite.id)
         self.assertEqual(fetched_invite.to_email, created_invite.to_email)
+        self.assertEqual(fetched_invite.extras['score'], extras['score'])
 
     def test_get_invite_does_not_exist(self):
         inv = self.uk.invites.get_invite('wrong-id')
