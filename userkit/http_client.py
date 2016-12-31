@@ -69,7 +69,7 @@ else:
                 '"requests" library is version %s. UserKit will fall back to '
                 'an alternate HTTP library so everything should work. We '
                 'recommend upgrading your "requests" library. If you have any '
-                'questions, please contact support@workpail.com. (HINT: running '
+                'questions, please contact support@userkit.io. (HINT: running '
                 '"pip install -U requests" should upgrade your requests '
                 'library to the latest version.)' % (version,))
             requests = None
@@ -153,13 +153,13 @@ class RequestsClient(HTTPClient):
         if isinstance(e, requests.exceptions.RequestException):
             msg = ("Unexpected error communicating with UserKit.  "
                    "If this problem persists, let us know at "
-                   "support@workpail.com.")
+                   "support@userkit.io.")
             err = "%s: %s" % (type(e).__name__, str(e))
         else:
             msg = ("Unexpected error communicating with UserKit. "
                    "It looks like there's probably a configuration "
                    "issue locally.  If this problem persists, let us "
-                   "know at support@workpail.com.")
+                   "know at support@userkit.io.")
             err = "A %s was raised" % (type(e).__name__,)
             if str(e):
                 err += " with error message %s" % (str(e),)
@@ -210,16 +210,16 @@ class UrlFetchClient(HTTPClient):
             msg = ("The UserKit library attempted to fetch an "
                    "invalid URL (%r). This is likely due to a bug "
                    "in the UserKit Python bindings. Please let us know "
-                   "at support@workpail.com." % (url,))
+                   "at support@userkit.io." % (url,))
         elif isinstance(e, urlfetch.DownloadError):
             msg = "There was a problem retrieving data from UserKit."
         elif isinstance(e, urlfetch.ResponseTooLargeError):
             msg = ("There was a problem receiving all of your data from "
                    "UserKit.  This is likely due to a bug in UserKit. "
-                   "Please let us know at support@workpail.com.")
+                   "Please let us know at support@userkit.io.")
         else:
             msg = ("Unexpected error communicating with UserKit. If this "
-                   "problem persists, let us know at support@workpail.com.")
+                   "problem persists, let us know at support@userkit.io.")
 
         msg = textwrap.fill(msg) + "\n\n(Network error: " + str(e) + ")"
         raise error.APIConnectionError(message=msg)
@@ -271,16 +271,16 @@ class PycurlClient(HTTPClient):
                    "internet connection and try again.  If this problem "
                    "persists, you should check UserKit's service status at "
                    "https://twitter.com/, or let us know at "
-                   "support@workpail.com.")
+                   "support@userkit.io.")
         elif (e[0] in [pycurl.E_SSL_CACERT,
                        pycurl.E_SSL_PEER_CERTIFICATE]):
             msg = ("Could not verify UserKit's SSL certificate.  Please make "
                    "sure that your network is not intercepting certificates.  "
                    "If this problem persists, let us know at "
-                   "support@workpail.com.")
+                   "support@userkit.io.")
         else:
             msg = ("Unexpected error communicating with UserKit. If this "
-                   "problem persists, let us know at support@workpail.com.")
+                   "problem persists, let us know at support@userkit.io.")
 
         msg = textwrap.fill(msg) + "\n\n(Network error: " + e[1] + ")"
         raise error.APIConnectionError(message=msg)
@@ -314,6 +314,6 @@ class Urllib2Client(HTTPClient):
 
     def _handle_request_error(self, e):
         msg = ("Unexpected error communicating with UserKit. "
-               "If this problem persists, let us know at support@workpail.com.")
+               "If this problem persists, let us know at support@userkit.io.")
         msg = textwrap.fill(msg) + "\n\n(Network error: " + str(e) + ")"
         raise error.APIConnectionError(message=msg)
