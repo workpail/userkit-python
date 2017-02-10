@@ -3,6 +3,7 @@ from users import UserManager
 from invites import InviteManager
 from emails import EmailManager
 from session import Session
+from widget import WidgetManager
 
 
 class UserKit(object):
@@ -13,6 +14,7 @@ class UserKit(object):
     users = None
     invites = None
     emails = None
+    widget = None
 
     def __init__(self, api_key, api_base_url=None, _requestor=None):
         if api_key is None:
@@ -31,6 +33,7 @@ class UserKit(object):
         self.users = UserManager(self._rq)
         self.invites = InviteManager(self._rq)
         self.emails = EmailManager(self._rq)
+        self.widget = WidgetManager(self._rq)
 
     @classmethod
     def version(cls):
