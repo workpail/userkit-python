@@ -13,11 +13,11 @@ class UserManager(object):
     def __init__(self, requestor):
         self._rq = requestor
 
-    def get_current_user(self, token):
+    def get_current_user(self, token, token_private=None):
         if not token:
             return None
         try:
-            return self.get_user_by_session(token)
+            return self.get_user_by_session(token, token_private)
         except error.UserAuthenticationError:
             return None
 
@@ -58,10 +58,14 @@ class UserManager(object):
         uri = '/users/logout'
         self._rq.request('post', uri, headers={'X-User-Token': token})
 
-    def get_user_by_session(self, token):
+    def get_user_by_session(self, token, token_private=None):
         uri = '/users/by_token'
+        headers = {'X-User-Token': token}
+        if token_private:
+            headers['X-User-Token-Private'] = token_private
+
         result_dict = self._rq.request('get', uri,
-                                       headers={'X-User-Token': token})
+                                       headers=headers)
         user = User(self._rq, **result_dict)
         return user
 
@@ -154,9 +158,13 @@ class UserManager(object):
         user = User(self._rq, **result_dict)
         return user
 
-    def refresh_session(self, session_token):
+    def refresh_session(self, session_token, token_private=None):
         uri = '/users/auth_token'
+        headers = {'X-User-Token': session_token}
+        if token_private:
+            headers['X-User-Token-Private'] = token_private
+
         result_dict = self._rq.request('get', uri,
-                                       headers={'X-User-Token': session_token})
+                                       headers=headers)
         session = Session(**result_dict)
         return session
