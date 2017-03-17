@@ -4,6 +4,7 @@ from invites import InviteManager
 from emails import EmailManager
 from session import Session
 from widget import WidgetManager
+from logs import LogsManager
 
 
 class UserKit(object):
@@ -34,6 +35,7 @@ class UserKit(object):
         self.invites = InviteManager(self._rq)
         self.emails = EmailManager(self._rq)
         self.widget = WidgetManager(self._rq)
+        self.logs = LogsManager(self._rq)
 
     @classmethod
     def version(cls):
