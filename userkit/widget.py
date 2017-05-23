@@ -24,7 +24,7 @@ class WidgetManager(object):
     def __init__(self, requestor):
         self._rq = requestor
 
-    def proxy(self, body, token_private=None):
+    def proxy(self, body, token_private=None, ip=None):
         """
         Make a request to the widget proxy endpoint.
 
@@ -48,6 +48,9 @@ class WidgetManager(object):
 
         if token_private:
             content['token_private'] = token_private
+
+        if ip:
+            content['ip'] = ip
 
         result_dict = self._rq.request('post', uri, post_data=content)
         resp = ProxyResponse()
