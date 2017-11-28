@@ -46,8 +46,8 @@ class User(object):
         result_dict = self._rq.request('post', uri, post_data={'disabled': disable_mode})
         self.__dict__.update(result_dict)
 
-    def get_extra(self, name):
-        if isinstance(self.extras, dict):
-            return self.extras[name]
+    def get_extra(self, name, default=None):
+        if self.extras is None:
+            return None
 
-        return None
+        return self.extras.get(name, default)
