@@ -140,7 +140,7 @@ DUMMY_INVITES_LIST = json.loads("""{
 }""")
 
 
-class MockRequestor():
+class MockRequestor:
     """MockRequestor pretends to be the requestor.Requestor class.
 
     It returns the right kind of data for each API endpoint. For
