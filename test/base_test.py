@@ -1,7 +1,7 @@
 import os
 import unittest
 import userkit
-import helper
+from . import helper
 
 
 class BaseTestCase(unittest.TestCase):

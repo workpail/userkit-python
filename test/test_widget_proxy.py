@@ -1,6 +1,6 @@
 import json
-from base_test import BaseTestCase
-from util import rand_str, rand_email
+from .base_test import BaseTestCase
+from .util import rand_str, rand_email
 
 
 class TestUsers(BaseTestCase):

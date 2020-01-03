@@ -1,7 +1,7 @@
-from base_test import BaseTestCase, BaseMockTestCase
-from helper import DUMMY_USER, DUMMY_VERIFIED_PHONE_SUCCESS
-from helper import DUMMY_VERIFIED_EMAIL_SUCCESS
-from util import rand_str, rand_email
+from .base_test import BaseTestCase, BaseMockTestCase
+from .helper import DUMMY_USER, DUMMY_VERIFIED_PHONE_SUCCESS
+from .helper import DUMMY_VERIFIED_EMAIL_SUCCESS
+from .util import rand_str, rand_email
 from userkit import error
 
 

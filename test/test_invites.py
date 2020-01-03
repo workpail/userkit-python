@@ -1,5 +1,5 @@
-from base_test import BaseTestCase
-from util import rand_email, rand_str
+from .base_test import BaseTestCase
+from .util import rand_email, rand_str
 
 
 class TestInvites(BaseTestCase):
