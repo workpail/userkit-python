@@ -1,10 +1,10 @@
-import util
+from . import util
 
 
 LOG_CREATE_FIELDS = ['actor', 'actor_ip', 'actor_useragent', 'action', 'actee', 'details']
 
 
-class Log(object):
+class Log:
     # instance vars
     id = None
     action = None
@@ -33,5 +33,5 @@ class Log(object):
         return util.json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
-        return {k: v for k, v in self.__dict__.iteritems()
+        return {k: v for k, v in self.__dict__.items()
                 if not k.startswith('_') and not callable(v)}

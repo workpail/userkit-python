@@ -1,11 +1,11 @@
-import util
+from . import util
 
 
 INVT_CREATE_FIELDS = ['to_email', 'from_user', 'expires_secs', 'extras',
                       'greeting', 'body', 'signature']
 
 
-class Invite(object):
+class Invite:
     # instance vars
     id = None
     token = None
@@ -30,5 +30,5 @@ class Invite(object):
         return util.json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
-        return {k: v for k, v in self.__dict__.iteritems()
+        return {k: v for k, v in self.__dict__.items()
                 if not k.startswith('_') and not callable(v)}

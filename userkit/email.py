@@ -1,7 +1,7 @@
-import util
+from . import util
 
 
-class Email(object):
+class Email:
     _rq = None
     id = None
     to = None
@@ -16,5 +16,5 @@ class Email(object):
         return util.json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
-        return {k: v for k, v in self.__dict__.iteritems()
+        return {k: v for k, v in self.__dict__.items()
                 if not k.startswith('_') and not callable(v)}

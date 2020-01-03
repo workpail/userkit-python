@@ -1,8 +1,8 @@
-from email import Email
-import error
+from .email import Email
+from . import error
 
 
-class EmailManager(object):
+class EmailManager:
     _rq = None
 
     def __init__(self, requestor):

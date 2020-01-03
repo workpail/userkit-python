@@ -1,7 +1,7 @@
 import json
 
 
-class ProxyResponse(object):
+class ProxyResponse:
     """Holds the response data for a widget-proxy request.
 
     response:
@@ -18,7 +18,7 @@ class ProxyResponse(object):
     token_private = None
 
 
-class WidgetManager(object):
+class WidgetManager:
     _rq = None
 
     def __init__(self, requestor):

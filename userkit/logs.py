@@ -1,11 +1,11 @@
-from log import Log, LOG_CREATE_FIELDS
+from .log import Log, LOG_CREATE_FIELDS
 
 
 class LogsList(list):
     next_page = None
 
 
-class LogsManager(object):
+class LogsManager:
     _rq = None
 
     def __init__(self, requestor):

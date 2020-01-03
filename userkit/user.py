@@ -1,11 +1,11 @@
-import util
+from . import util
 
 
 USR_MUTABLE_FIELDS = ['username', 'email', 'name', 'password', 'auth_type',
                       'extras']
 
 
-class User(object):
+class User:
     # instance fields
     _rq = None
     id = None
@@ -24,7 +24,7 @@ class User(object):
         return util.json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
-        return {k: v for k, v in self.__dict__.iteritems()
+        return {k: v for k, v in self.__dict__.items()
                 if not k.startswith('_') and not callable(v)}
 
     def update_dict(self, dict):

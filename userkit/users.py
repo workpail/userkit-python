@@ -1,13 +1,13 @@
-from user import User, USR_MUTABLE_FIELDS
-from session import Session
-import error as error
+from .user import User, USR_MUTABLE_FIELDS
+from .session import Session
+from . import error as error
 
 
 class UserList(list):
     next_page = None
 
 
-class UserManager(object):
+class UserManager:
     _rq = None
 
     def __init__(self, requestor):

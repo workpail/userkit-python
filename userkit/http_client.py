@@ -26,13 +26,17 @@
 # THE SOFTWARE.
 
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
 import os
 import sys
 import textwrap
 import warnings
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
-import error, util
+from . import error, util
 
 
 # - Requests is the preferred HTTP library
@@ -40,7 +44,7 @@ import error, util
 # - Use Pycurl if it's there (at least it verifies SSL certs)
 # - Fall back to urllib2 with a warning if needed
 try:
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
 except ImportError:
     pass
 
@@ -99,7 +103,7 @@ def new_default_http_client(*args, **kwargs):
     return impl(*args, **kwargs)
 
 
-class HTTPClient(object):
+class HTTPClient:
 
     def __init__(self, verify_ssl_certs=True):
         self._verify_ssl_certs = verify_ssl_certs
@@ -129,7 +133,7 @@ class RequestsClient(HTTPClient):
                                           data=post_data,
                                           timeout=80,
                                           **kwargs)
-            except TypeError, e:
+            except TypeError as e:
                 raise TypeError(
                     'Warning: It looks like your installed version of the '
                     '"requests" library is not compatible with UserKit\'s '
@@ -143,7 +147,7 @@ class RequestsClient(HTTPClient):
             # are susceptible to the same and should be updated.
             content = result.content
             status_code = result.status_code
-        except Exception, e:
+        except Exception as e:
             # Would catch just requests.exceptions.RequestException, but can
             # also raise ValueError, RuntimeError, etc.
             self._handle_request_error(e)
@@ -184,7 +188,7 @@ class UrlFetchClient(HTTPClient):
             method = method_map.get(method, urlfetch.GET)
 
             if isinstance(post_data, dict):
-                post_data = urllib.urlencode(post_data)
+                post_data = urllib.parse.urlencode(post_data)
             
             result = urlfetch.fetch(
                 url=url,
@@ -200,7 +204,7 @@ class UrlFetchClient(HTTPClient):
                 deadline=55,
                 payload=post_data
             )
-        except urlfetch.Error, e:
+        except urlfetch.Error as e:
             self._handle_request_error(e, url)
 
         return result.content, result.status_code
@@ -248,7 +252,7 @@ class PycurlClient(HTTPClient):
         curl.setopt(pycurl.CONNECTTIMEOUT, 30)
         curl.setopt(pycurl.TIMEOUT, 80)
         curl.setopt(pycurl.HTTPHEADER, ['%s: %s' % (k, v)
-                    for k, v in headers.iteritems()])
+                    for k, v in headers.items()])
         if self._verify_ssl_certs:
             curl.setopt(pycurl.CAINFO, os.path.join(
                 os.path.dirname(__file__), 'data/ca-certificates.crt'))
@@ -257,7 +261,7 @@ class PycurlClient(HTTPClient):
 
         try:
             curl.perform()
-        except pycurl.error, e:
+        except pycurl.error as e:
             self._handle_request_error(e)
         rbody = s.getvalue()
         rcode = curl.getinfo(pycurl.RESPONSE_CODE)
@@ -296,19 +300,19 @@ class Urllib2Client(HTTPClient):
         if sys.version_info >= (3, 0) and isinstance(post_data, basestring):
             post_data = post_data.encode('utf-8')
 
-        req = urllib2.Request(url, post_data, headers)
+        req = urllib.request.Request(url, post_data, headers)
 
         if method not in ('get', 'post'):
             req.get_method = lambda: method.upper()
 
         try:
-            response = urllib2.urlopen(req)
+            response = urllib.request.urlopen(req)
             rbody = response.read()
             rcode = response.code
-        except urllib2.HTTPError, e:
+        except urllib.error.HTTPError as e:
             rcode = e.code
             rbody = e.read()
-        except (urllib2.URLError, ValueError), e:
+        except (urllib.error.URLError, ValueError) as e:
             self._handle_request_error(e)
         return rbody, rcode
 

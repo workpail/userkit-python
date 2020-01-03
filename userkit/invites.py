@@ -1,12 +1,12 @@
-from invite import Invite, INVT_CREATE_FIELDS
-import error
+from .invite import Invite, INVT_CREATE_FIELDS
+from . import error
 
 
 class InviteList(list):
     next_page = None
 
 
-class InviteManager(object):
+class InviteManager:
     _rq = None
 
     def __init__(self, requestor):

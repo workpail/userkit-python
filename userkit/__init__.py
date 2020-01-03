@@ -1,13 +1,13 @@
-from requestor import Requestor
-from users import UserManager
-from invites import InviteManager
-from emails import EmailManager
-from session import Session
-from widget import WidgetManager
-from logs import LogsManager
+from .requestor import Requestor
+from .users import UserManager
+from .invites import InviteManager
+from .emails import EmailManager
+from .session import Session
+from .widget import WidgetManager
+from .logs import LogsManager
 
 
-class UserKit(object):
+class UserKit:
     _rq = None
     api_version = 1.0
     api_base_url = None

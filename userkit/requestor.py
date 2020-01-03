@@ -1,12 +1,14 @@
-import base64
-import urllib
-import util
-import error
+from future import standard_library
+standard_library.install_aliases()
+from base64 import b64encode
+import urllib.request, urllib.parse, urllib.error
+from . import util
+from . import error
 
-from http_client import new_default_http_client
+from .http_client import new_default_http_client
 
 
-class Requestor(object):
+class Requestor:
 
     def __init__(self, api_key=None, api_base_url=None):
         self.api_key = api_key
@@ -25,12 +27,12 @@ class Requestor(object):
         if self.authorization is None:
             if ':' in self.api_key:
                 # Old style key
-                self.authorization = 'Basic %s' % \
-                                     base64.b64encode('%s' % self.api_key)
+                b64_key = b64encode(self.api_key.encode()).decode()
+                self.authorization = 'Basic %s' % b64_key
             else:
                 # New style, username part is always "api"
-                self.authorization = 'Basic %s' % \
-                                     base64.b64encode('api:%s' % self.api_key)
+                b64_key = b64encode(b'api:%s' % self.api_key.encode()).decode()
+                self.authorization = 'Basic %s' % b64_key
 
         request_headers = {
             'Authorization': self.authorization,
@@ -46,7 +48,7 @@ class Requestor(object):
         headers = self.create_headers(headers)
 
         if uri_params:
-            uri_params = urllib.urlencode(uri_params)
+            uri_params = urllib.parse.urlencode(uri_params)
             url = '%s?%s' % (url, uri_params)
 
         if method.upper() in ['POST', 'PUT', 'PATCH']:
