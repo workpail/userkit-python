@@ -1,7 +1,10 @@
 # Python UserKit
 
 ## Summary
-A UserKit client library for Python.
+A UserKit client library for Python. This branch supports python 2 and
+3, and is compatible with the App Engine Python27 standard environment.
+
+WARNING: this branch is deprecated and won't be actively updated.
 
 ## Installation
 
