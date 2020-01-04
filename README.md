@@ -1,7 +1,7 @@
 # Python UserKit
 
 ## Summary
-A UserKit client library for Python.
+A UserKit client library for Python 3.
 
 ## Installation
 
