@@ -1,4 +1,4 @@
-from . import util
+import json
 
 
 class Session:
@@ -14,7 +14,7 @@ class Session:
         self.__dict__.update(kwargs)
 
     def __str__(self):
-        return util.json.dumps(self.dict(), sort_keys=True, indent=2)
+        return json.dumps(self.dict(), sort_keys=True, indent=2)
 
     def dict(self):
         return {k: v for k, v in self.__dict__.items()

@@ -2,9 +2,9 @@ from future import standard_library
 standard_library.install_aliases()
 from base64 import b64encode
 import urllib.request, urllib.parse, urllib.error
-from . import util
 from . import error
 
+import json
 import requests
 import textwrap
 
@@ -52,7 +52,7 @@ class Requestor:
 
         if method.upper() in ['POST', 'PUT', 'PATCH']:
             headers.update({'Content-Type': 'application/json'})
-            post_data = util.json.dumps(post_data)
+            post_data = json.dumps(post_data)
 
         try:
             result = requests.request(
@@ -65,7 +65,7 @@ class Requestor:
     @staticmethod
     def process_response(content, status_code):
         try:
-            json_body = util.json.loads(content)
+            json_body = json.loads(content)
         except Exception as e:
             msg = 'Parse error: {0}. Status code: {1}'.format(e, status_code)
             raise error.UserKitError(message=msg)
