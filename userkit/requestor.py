@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 from base64 import b64encode
 import urllib.request, urllib.parse, urllib.error
 from . import error
