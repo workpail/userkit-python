@@ -5,7 +5,8 @@ import urllib.request, urllib.parse, urllib.error
 from . import util
 from . import error
 
-from .http_client import new_default_http_client
+import requests
+import textwrap
 
 
 class Requestor:
@@ -14,9 +15,7 @@ class Requestor:
         self.api_key = api_key
         self.api_base_url = api_base_url
 
-        # we create ONE instance of an http handler
         self.authorization = None
-        self.httpHandler = new_default_http_client()
 
     def __del__(self):
         self.api_key = None
@@ -55,12 +54,16 @@ class Requestor:
             headers.update({'Content-Type': 'application/json'})
             post_data = util.json.dumps(post_data)
 
-        content, status_code = self.httpHandler.request(method, url, headers,
-                                                        post_data)
+        try:
+            result = requests.request(
+                method, url, headers=headers, data=post_data, timeout=60)
+        except Exception as e:
+            raise error.APIConnectionError(message=self._request_error_msg(e))
 
-        return self.process_response(content, status_code)
+        return self.process_response(result.content, result.status_code)
 
-    def process_response(self, content, status_code):
+    @staticmethod
+    def process_response(content, status_code):
         try:
             json_body = util.json.loads(content)
         except Exception as e:
@@ -85,3 +88,23 @@ class Requestor:
                    'If this persists, please let us know at '
                    'support@userkit.io').format(status_code)
             raise error.APIError(message=msg)
+
+    @staticmethod
+    def _request_error_msg(e):
+        if isinstance(e, requests.exceptions.RequestException):
+            msg = ("Unexpected error communicating with UserKit.  "
+                   "If this problem persists, let us know at "
+                   "support@userkit.io.")
+            err = "%s: %s" % (type(e).__name__, str(e))
+        else:
+            msg = ("Unexpected error communicating with UserKit. "
+                   "It looks like there's probably a configuration "
+                   "issue locally.  If this problem persists, let us "
+                   "know at support@userkit.io.")
+            err = "A %s was raised" % (type(e).__name__,)
+            if str(e):
+                err += " with error message %s" % (str(e),)
+            else:
+                err += " with no error message"
+        msg = textwrap.fill(msg) + "\n\n(Network error: %s)" % (err,)
+        return msg
