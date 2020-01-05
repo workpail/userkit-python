@@ -5,11 +5,13 @@ A UserKit client library for Python 3.
 
 ## Installation
 
-Clone or download the repository from github:
+You can use pip to install userkit:
+
 ```
-git clone git@github.com:workpail/userkit-python
+pip install userkit
 ```
-Then copy or symlink the `userkit-python/userkit` sub-directory into
+
+Or [download](https://github.com/workpail/userkit-python/archive/master.zip), then copy or symlink the `userkit-python/userkit` sub-directory into
 your project.
 
 ## Documentation
