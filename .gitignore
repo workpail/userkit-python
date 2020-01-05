@@ -3,3 +3,6 @@
 .idea/*
 
 env
+build
+dist
+userkit.egg-info
